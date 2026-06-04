@@ -365,15 +365,16 @@ export default function DetallaNegocio() {
   if (error)   return <ErrorState message={error} onRetry={load} />;
   if (!data)   return null;
 
-  const { business, transactions, todos, history } = data;
+  const { business, transactions, todos, history, currentMrr } = data;
   const col = COLOR_CFG[business.color] || COLOR_CFG.blue;
   const statusCfg = STATUS_CFG[business.status] || STATUS_CFG.construccion;
 
   // Stats del mes seleccionado
   const income   = transactions.filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0);
   const expenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
-  const mrr      = transactions.filter(t => t.type === 'income' && t.is_recurring).reduce((s, t) => s + Number(t.amount), 0);
   const net      = income - expenses;
+  const mrr      = currentMrr ?? 0; // siempre del mes actual, no del mes navegado
+  const isHistoricMonth = month !== currentMonthISO();
 
   const chartData = (history || []).map((h) => ({
     label: monthShort(h.month),
@@ -445,12 +446,19 @@ export default function DetallaNegocio() {
       <div className="p-8 space-y-6">
         {/* ── Stats ── */}
         <div className="grid grid-cols-4 gap-3">
-          <StatTile
-            label="MRR"
-            value={mrr > 0 ? fmx(mrr) : '—'}
-            color="accent"
-            icon={Repeat2}
-          />
+          <div className="relative">
+            <StatTile
+              label="MRR"
+              value={mrr > 0 ? fmx(mrr) : '—'}
+              color="accent"
+              icon={Repeat2}
+            />
+            {isHistoricMonth && mrr > 0 && (
+              <span className="absolute top-3 right-3 text-[10px] font-medium text-indigo-400/60 leading-none">
+                hoy
+              </span>
+            )}
+          </div>
           <StatTile
             label="Ingresos"
             value={income > 0 ? fmx(income) : '—'}

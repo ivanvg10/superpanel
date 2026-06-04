@@ -89,7 +89,18 @@ router.get('/:slug', async (req, res) => {
       [business.id]
     );
 
-    res.json({ business, transactions, todos, history });
+    // MRR real: siempre del mes en curso (no del mes seleccionado)
+    const { rows: [mrrRow] } = await pool.query(
+      `SELECT COALESCE(SUM(amount), 0) AS current_mrr
+       FROM transactions
+       WHERE business_id = $1
+         AND type = 'income'
+         AND is_recurring = TRUE
+         AND DATE_TRUNC('month', date) = DATE_TRUNC('month', CURRENT_DATE)`,
+      [business.id]
+    );
+
+    res.json({ business, transactions, todos, history, currentMrr: Number(mrrRow.current_mrr) });
   } catch (err) {
     console.error('[negocios GET /:slug]', err.message);
     res.status(500).json({ error: 'Error del servidor' });
