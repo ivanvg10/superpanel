@@ -2,10 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from 'recharts';
+import {
   ArrowLeft, ArrowUpRight, Plus, Trash2,
   ChevronLeft, ChevronRight, TrendingUp, TrendingDown,
   Repeat2, CheckSquare, Circle, CheckCheck, ExternalLink,
-  Minus, ReceiptText, Settings,
+  Minus, ReceiptText, Settings, BarChart2,
 } from 'lucide-react';
 import api from '../../lib/api';
 import Button from '../../components/ui/Button';
@@ -47,6 +50,11 @@ function formatDate(str) {
   return new Date(str + 'T00:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
 }
 
+function monthShort(ym) {
+  const [y, m] = ym.split('-');
+  return new Date(y, m - 1).toLocaleDateString('es-MX', { month: 'short' }).replace('.', '');
+}
+
 function groupByDate(txns) {
   return txns.reduce((acc, t) => {
     const k = t.date.split('T')[0].slice(0, 10);
@@ -74,6 +82,22 @@ const EXPENSE_CATEGORIES = ['Marketing', 'Infraestructura', 'Herramientas', 'Per
 const EMPTY_TXN = { type: 'income', amount: '', description: '', category: '', date: '', is_recurring: false };
 
 // ─── Subcomponentes ───────────────────────────────────────────────────────────
+
+function HistoryTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
+      <p className="text-zinc-400 mb-1.5 capitalize font-medium">{label}</p>
+      {payload.map((p) => (
+        <div key={p.dataKey} className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: p.fill }} />
+          <span className="text-zinc-500">{p.name}:</span>
+          <span className="font-mono text-zinc-200">{fmx(p.value)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function MonthPicker({ value, onChange }) {
   return (
@@ -341,7 +365,7 @@ export default function DetallaNegocio() {
   if (error)   return <ErrorState message={error} onRetry={load} />;
   if (!data)   return null;
 
-  const { business, transactions, todos } = data;
+  const { business, transactions, todos, history } = data;
   const col = COLOR_CFG[business.color] || COLOR_CFG.blue;
   const statusCfg = STATUS_CFG[business.status] || STATUS_CFG.construccion;
 
@@ -350,6 +374,12 @@ export default function DetallaNegocio() {
   const expenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + Number(t.amount), 0);
   const mrr      = transactions.filter(t => t.type === 'income' && t.is_recurring).reduce((s, t) => s + Number(t.amount), 0);
   const net      = income - expenses;
+
+  const chartData = (history || []).map((h) => ({
+    label: monthShort(h.month),
+    income: Number(h.income),
+    expenses: Number(h.expenses),
+  }));
 
   // Filtrado de transacciones
   const visibleTxns = transactions.filter(t => txnFilter === 'all' || t.type === txnFilter);
@@ -440,6 +470,37 @@ export default function DetallaNegocio() {
             icon={net >= 0 ? TrendingUp : TrendingDown}
           />
         </div>
+
+        {/* ── Histórico 6 meses ── */}
+        {chartData.length > 0 && (
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">
+            <div className="flex items-center gap-2 px-5 py-4 border-b border-zinc-800">
+              <BarChart2 className="w-3.5 h-3.5 text-zinc-500" />
+              <span className="text-sm font-semibold text-zinc-300">Histórico 6 meses</span>
+            </div>
+            <div className="px-5 py-4">
+              <ResponsiveContainer width="100%" height={160}>
+                <BarChart data={chartData} barGap={3} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
+                  <CartesianGrid vertical={false} stroke="#27272A" />
+                  <XAxis
+                    dataKey="label"
+                    tick={{ fill: '#71717A', fontSize: 11, fontFamily: 'Inter' }}
+                    tickLine={false} axisLine={false}
+                  />
+                  <YAxis
+                    tick={{ fill: '#71717A', fontSize: 11, fontFamily: 'JetBrains Mono' }}
+                    tickLine={false} axisLine={false}
+                    width={54}
+                    tickFormatter={(v) => v === 0 ? '0' : v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`}
+                  />
+                  <Tooltip content={<HistoryTooltip />} cursor={{ fill: 'rgba(99,102,241,0.05)', radius: 4 }} />
+                  <Bar dataKey="income" name="Ingresos" fill="#10B981" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                  <Bar dataKey="expenses" name="Gastos" fill="#EF4444" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
 
         {/* ── Transacciones ── */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">
