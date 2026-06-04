@@ -38,9 +38,14 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 - **Etapa 3 ✅** — Negocios: vista general consolidada, detalle por negocio, transacciones, MonthPicker
 - **Etapa 4 ✅** — Polish + deploy: design system premium, componentes UI base, README, configs Railway/Vercel
 - **Etapa 5 ✅** — Dashboard Home `/`: GET /dashboard (Promise.all 8 queries), consolidado negocios, panel fitness (cannabis streak / gym / box / peso+delta), tareas urgentes, recordatorios próximos/vencidos
+- **Etapa 6 ✅** — Polish DetallaNegocio: history sparkline (BarChart 6 meses), sidebar dinámico desde DB, MRR semántico con `currentMrr` siempre del mes en curso
 
-## Gaps conocidos (siguiente etapa natural)
-_Todos los gaps de la Etapa 5 fueron resueltos — ver historial de cambios_
+## Ideas para siguiente etapa (no comprometidas)
+- **Editar negocio inline** — PATCH /negocios/:slug ya existe en el backend; falta UI (modal o inline edit) para cambiar name, description, status, color, urls
+- **Agregar negocio nuevo** — POST /negocios + formulario (actualmente solo se puede por DB directa)
+- **Notificaciones / alertas** — recordatorios vencidos con badge en sidebar, push notification o email
+- **Exportar PDF/CSV** — transacciones del mes por negocio
+- **Modo offline / PWA** — service worker básico para uso sin conexión
 
 ## Decisiones técnicas tomadas
 - Acento indigo `#6366f1`, fondo `zinc-950`, sidebar `zinc-900`
