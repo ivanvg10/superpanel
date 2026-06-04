@@ -132,6 +132,39 @@ router.patch('/:slug', async (req, res) => {
   }
 });
 
+// POST /negocios — crea un nuevo negocio
+router.post('/', async (req, res) => {
+  try {
+    const { name, description, url, admin_url, status, color } = req.body;
+    if (!name?.trim()) return res.status(400).json({ error: 'Nombre requerido' });
+
+    const slug = name.trim().toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+      .slice(0, 50) || 'negocio';
+
+    const { rows: [biz] } = await pool.query(
+      `INSERT INTO businesses (user_id, slug, name, description, url, admin_url, status, color)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [
+        req.user.id, slug, name.trim(),
+        description?.trim() || null,
+        url?.trim() || null,
+        admin_url?.trim() || null,
+        status || 'construccion',
+        color || 'blue',
+      ]
+    );
+    res.status(201).json(biz);
+  } catch (err) {
+    if (err.code === '23505') {
+      return res.status(409).json({ error: 'Ya existe un negocio con ese nombre' });
+    }
+    console.error('[negocios POST /]', err.message);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
 // ─── TRANSACTIONS ─────────────────────────────────────────────────────────────
 
 // POST /negocios/:slug/transactions

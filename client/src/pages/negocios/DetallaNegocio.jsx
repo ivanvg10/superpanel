@@ -76,6 +76,18 @@ const COLOR_CFG = {
   amber:   { icon: 'text-amber-400',   ring: 'bg-amber-500/10   border-amber-500/20'  },
 };
 
+const STATUS_OPTIONS = [
+  { id: 'construccion', label: 'En construcción' },
+  { id: 'beta',         label: 'Beta'            },
+  { id: 'live',         label: 'Live'            },
+];
+
+const EDIT_COLOR_OPTIONS = [
+  { id: 'blue',    label: 'Azul',  dot: 'bg-blue-500'    },
+  { id: 'emerald', label: 'Verde', dot: 'bg-emerald-500' },
+  { id: 'amber',   label: 'Ámbar', dot: 'bg-amber-500'   },
+];
+
 const INCOME_CATEGORIES  = ['Suscripciones', 'Servicios', 'Consultoría', 'Ventas', 'Publicidad', 'Otro'];
 const EXPENSE_CATEGORIES = ['Marketing', 'Infraestructura', 'Herramientas', 'Personal', 'Legal', 'Otro'];
 
@@ -212,6 +224,97 @@ function PendienteTodo({ todo }) {
   );
 }
 
+function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <Input
+        label="Nombre"
+        value={form.name}
+        onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+        required
+        autoFocus
+      />
+      <Input
+        as="textarea"
+        label="Descripción"
+        rows={2}
+        value={form.description}
+        onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+        placeholder="Descripción breve del negocio"
+      />
+
+      {/* Status */}
+      <div>
+        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Estado</label>
+        <div className="flex rounded-xl border border-zinc-800 overflow-hidden">
+          {STATUS_OPTIONS.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, status: id }))}
+              className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
+                form.status === id
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Color */}
+      <div>
+        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Color</label>
+        <div className="flex gap-2">
+          {EDIT_COLOR_OPTIONS.map(({ id, label, dot }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, color: id }))}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
+                form.color === id
+                  ? 'border-indigo-500/60 bg-indigo-500/10 text-zinc-100'
+                  : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+              }`}
+            >
+              <span className={`w-2.5 h-2.5 rounded-full ${dot}`} />
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Input
+          label="URL pública"
+          type="url"
+          value={form.url}
+          onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
+          placeholder="https://…"
+        />
+        <Input
+          label="URL admin"
+          type="url"
+          value={form.admin_url}
+          onChange={(e) => setForm((f) => ({ ...f, admin_url: e.target.value }))}
+          placeholder="https://…/admin"
+        />
+      </div>
+
+      {error && <p className="text-sm text-red-400">{error}</p>}
+
+      <div className="flex gap-2 pt-1">
+        <Button type="submit" disabled={saving} className="flex-1">
+          {saving ? 'Guardando…' : 'Guardar cambios'}
+        </Button>
+        <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+      </div>
+    </form>
+  );
+}
+
 function TransactionForm({ form, setForm, onSubmit, onClose, saving }) {
   const cats = form.type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
   const selectCls = "w-full bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-100 text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/60 hover:border-zinc-700 transition-all";
@@ -317,6 +420,11 @@ export default function DetallaNegocio() {
   const [saving, setSaving]     = useState(false);
   const [txnFilter, setTxnFilter] = useState('all'); // 'all' | 'income' | 'expense'
 
+  const [editModal, setEditModal]   = useState(false);
+  const [editForm, setEditForm]     = useState({});
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [editError, setEditError]   = useState(null);
+
   const load = useCallback(async () => {
     setLoading(true); setError(null);
     try {
@@ -359,6 +467,35 @@ export default function DetallaNegocio() {
         transactions: d.transactions.filter((t) => t.id !== id),
       }));
     } catch { /* no-op */ }
+  };
+
+  const openEditModal = () => {
+    setEditForm({
+      name:        data.business.name        || '',
+      description: data.business.description || '',
+      url:         data.business.url         || '',
+      admin_url:   data.business.admin_url   || '',
+      status:      data.business.status      || 'construccion',
+      color:       data.business.color       || 'blue',
+    });
+    setEditError(null);
+    setEditModal(true);
+  };
+
+  const handleEditBiz = async (e) => {
+    e.preventDefault();
+    setSavingEdit(true); setEditError(null);
+    try {
+      const { data: updated } = await api.patch(`/negocios/${slug}`, editForm);
+      setData((d) => ({ ...d, business: updated }));
+      setEditModal(false);
+      window.dispatchEvent(new Event('negocios-updated'));
+    } catch (err) {
+      const msg = err.response?.data?.error;
+      setEditError(typeof msg === 'string' ? msg : 'Error al guardar');
+    } finally {
+      setSavingEdit(false);
+    }
   };
 
   if (loading) return <PageLoader rows={4} />;
@@ -435,6 +572,13 @@ export default function DetallaNegocio() {
                 Ir al admin
               </a>
             )}
+            <button
+              onClick={openEditModal}
+              className="p-2 rounded-xl text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 border border-transparent hover:border-zinc-700 transition-all"
+              title="Editar negocio"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
             <Button onClick={() => { setForm({ ...EMPTY_TXN, date: new Date().toISOString().split('T')[0] }); setModal(true); }}>
               <Plus className="w-4 h-4" />
               Transacción
@@ -640,6 +784,23 @@ export default function DetallaNegocio() {
           onSubmit={handleAddTxn}
           onClose={() => setModal(false)}
           saving={saving}
+        />
+      </Modal>
+
+      {/* ── Modal editar negocio ── */}
+      <Modal
+        isOpen={editModal}
+        onClose={() => setEditModal(false)}
+        title={`Editar — ${business.name}`}
+        size="lg"
+      >
+        <EditNegocioForm
+          form={editForm}
+          setForm={setEditForm}
+          onSubmit={handleEditBiz}
+          onClose={() => setEditModal(false)}
+          saving={savingEdit}
+          error={editError}
         />
       </Modal>
     </motion.div>

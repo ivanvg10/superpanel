@@ -52,7 +52,12 @@ export default function Sidebar() {
   const [businesses, setBusinesses] = useState([]);
 
   useEffect(() => {
-    api.get('/negocios').then(({ data }) => setBusinesses(data)).catch(() => {});
+    const refresh = () => {
+      api.get('/negocios').then(({ data }) => setBusinesses(data)).catch(() => {});
+    };
+    refresh();
+    window.addEventListener('negocios-updated', refresh);
+    return () => window.removeEventListener('negocios-updated', refresh);
   }, []);
 
   const nav = [
