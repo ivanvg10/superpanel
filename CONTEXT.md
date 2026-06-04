@@ -39,10 +39,9 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 - **Etapa 4 ✅** — Polish + deploy: design system premium, componentes UI base, README, configs Railway/Vercel
 - **Etapa 5 ✅** — Dashboard Home `/`: GET /dashboard (Promise.all 8 queries), consolidado negocios, panel fitness (cannabis streak / gym / box / peso+delta), tareas urgentes, recordatorios próximos/vencidos
 - **Etapa 6 ✅** — Polish DetallaNegocio: history sparkline (BarChart 6 meses), sidebar dinámico desde DB, MRR semántico con `currentMrr` siempre del mes en curso
+- **Etapa 7 ✅** — CRUD negocios: POST /negocios (nuevo endpoint, auto-slug), modal "Nuevo negocio" en VistaGeneral, modal "Editar negocio" (Settings) en DetallaNegocio, sidebar se refresca vía evento `negocios-updated`
 
 ## Ideas para siguiente etapa (no comprometidas)
-- **Editar negocio inline** — PATCH /negocios/:slug ya existe en el backend; falta UI (modal o inline edit) para cambiar name, description, status, color, urls
-- **Agregar negocio nuevo** — POST /negocios + formulario (actualmente solo se puede por DB directa)
 - **Notificaciones / alertas** — recordatorios vencidos con badge en sidebar, push notification o email
 - **Exportar PDF/CSV** — transacciones del mes por negocio
 - **Modo offline / PWA** — service worker básico para uso sin conexión
@@ -94,6 +93,7 @@ superpanel/
 ## Historial de cambios relevantes
 | Fecha | Cambio |
 |---|---|
+| 2026-06-04 | Etapa 7: CRUD negocios — POST /negocios, modal crear en VistaGeneral, modal editar en DetallaNegocio, sidebar refresca vía evento |
 | 2026-06-04 | History sparkline: BarChart recharts en DetallaNegocio; `history` ya venía del backend |
 | 2026-06-04 | Sidebar dinámico: negocios cargados de GET /negocios en montaje, sin hardcodeo |
 | 2026-06-04 | MRR semántico: backend agrega `currentMrr` (CURRENT_DATE); badge "hoy" en meses históricos |
