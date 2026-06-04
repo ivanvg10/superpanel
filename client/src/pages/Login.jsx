@@ -14,7 +14,7 @@ export default function Login() {
   const { user, login }         = useAuth();
   const navigate                = useNavigate();
 
-  if (user) return <Navigate to="/negocios" replace />;
+  if (user) return <Navigate to="/" replace />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,9 +22,10 @@ export default function Login() {
     setLoading(true);
     try {
       await login(email.trim(), password);
-      navigate('/negocios');
+      navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al iniciar sesión');
+      const serverMsg = err.response?.data?.error;
+      setError(typeof serverMsg === 'string' ? serverMsg : 'Error al iniciar sesión');
     } finally {
       setLoading(false);
     }

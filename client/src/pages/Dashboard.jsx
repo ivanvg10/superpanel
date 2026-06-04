@@ -327,8 +327,20 @@ export default function Dashboard() {
   const load = () => {
     setLoading(true);
     api.get('/dashboard')
-      .then((r) => { setData(r.data); setLoading(false); })
-      .catch(() => { setError('No se pudo cargar el dashboard'); setLoading(false); });
+      .then((r) => {
+        const d = r.data;
+        if (!d || !Array.isArray(d.businesses)) {
+          setError('Respuesta inesperada del servidor');
+        } else {
+          setData(d);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        const msg = err?.response?.data?.error;
+        setError(typeof msg === 'string' ? msg : 'No se pudo cargar el dashboard');
+        setLoading(false);
+      });
   };
 
   useEffect(load, []);

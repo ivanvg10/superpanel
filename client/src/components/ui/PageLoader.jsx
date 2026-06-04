@@ -44,7 +44,7 @@ export function ErrorState({ message, onRetry }) {
         </div>
         <div className="flex-1">
           <p className="text-sm font-medium text-red-300 mb-1">Error al cargar</p>
-          <p className="text-sm text-red-400/70 mb-3">{message}</p>
+          <p className="text-sm text-red-400/70 mb-3">{typeof message === 'string' ? message : JSON.stringify(message)}</p>
           {onRetry && (
             <button
               onClick={onRetry}
