@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -6,38 +7,26 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { staggerContainer, staggerItem } from '../lib/animations';
+import api from '../lib/api';
 
-const NAV = [
-  {
-    section: 'Inicio',
-    icon: Home,
-    items: [
-      { to: '/', label: 'Dashboard', icon: Home, end: true },
-    ],
-  },
-  {
-    section: 'Negocios',
-    icon: Briefcase,
-    items: [
-      { to: '/negocios',             label: 'Vista General',  icon: LayoutDashboard, end: true },
-      { to: '/negocios/chai-fit',    label: 'Chai Fit',       icon: TrendingUp },
-      { to: '/negocios/leon-coach',  label: 'León Coach',     icon: Briefcase },
-      { to: '/negocios/san-charly',  label: 'San Charly MX',  icon: Briefcase },
-    ],
-  },
-  {
-    section: 'Personal',
-    icon: User,
-    items: [
-      { to: '/personal/pendientes',    label: 'Pendientes',    icon: CheckSquare },
-      { to: '/personal/gym',           label: 'Gym',           icon: Dumbbell },
-      { to: '/personal/box',           label: 'Box',           icon: Dumbbell },
-      { to: '/personal/peso',          label: 'Peso',          icon: Weight },
-      { to: '/personal/cannabis',      label: 'Cannabis',      icon: Leaf },
-      { to: '/personal/recordatorios', label: 'Recordatorios', icon: Bell },
-    ],
-  },
-];
+const PERSONAL_NAV = {
+  section: 'Personal',
+  icon: User,
+  items: [
+    { to: '/personal/pendientes',    label: 'Pendientes',    icon: CheckSquare },
+    { to: '/personal/gym',           label: 'Gym',           icon: Dumbbell },
+    { to: '/personal/box',           label: 'Box',           icon: Dumbbell },
+    { to: '/personal/peso',          label: 'Peso',          icon: Weight },
+    { to: '/personal/cannabis',      label: 'Cannabis',      icon: Leaf },
+    { to: '/personal/recordatorios', label: 'Recordatorios', icon: Bell },
+  ],
+};
+
+const ICON_BY_COLOR = {
+  emerald: TrendingUp,
+  blue:    Briefcase,
+  amber:   Briefcase,
+};
 
 function NavItem({ to, label, icon: Icon, end = false }) {
   return (
@@ -60,6 +49,32 @@ function NavItem({ to, label, icon: Icon, end = false }) {
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
+  const [businesses, setBusinesses] = useState([]);
+
+  useEffect(() => {
+    api.get('/negocios').then(({ data }) => setBusinesses(data)).catch(() => {});
+  }, []);
+
+  const nav = [
+    {
+      section: 'Inicio',
+      icon: Home,
+      items: [{ to: '/', label: 'Dashboard', icon: Home, end: true }],
+    },
+    {
+      section: 'Negocios',
+      icon: Briefcase,
+      items: [
+        { to: '/negocios', label: 'Vista General', icon: LayoutDashboard, end: true },
+        ...businesses.map((b) => ({
+          to: `/negocios/${b.slug}`,
+          label: b.name,
+          icon: ICON_BY_COLOR[b.color] || Briefcase,
+        })),
+      ],
+    },
+    PERSONAL_NAV,
+  ];
 
   const initials = user?.name
     ? user.name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
@@ -82,7 +97,7 @@ export default function Sidebar() {
 
       {/* Navegación */}
       <nav className="flex-1 overflow-y-auto p-3 space-y-6">
-        {NAV.map(({ section, icon: SectionIcon, items }) => (
+        {nav.map(({ section, icon: SectionIcon, items }) => (
           <div key={section}>
             <div className="flex items-center gap-2 px-3 mb-2">
               <SectionIcon className="w-3.5 h-3.5 text-zinc-600" />
