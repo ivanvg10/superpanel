@@ -40,9 +40,7 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 - **Etapa 5 ✅** — Dashboard Home `/`: GET /dashboard (Promise.all 8 queries), consolidado negocios, panel fitness (cannabis streak / gym / box / peso+delta), tareas urgentes, recordatorios próximos/vencidos
 
 ## Gaps conocidos (siguiente etapa natural)
-- **History sparkline en DetallaNegocio:** el backend ya devuelve `history` (últimos 6 meses) pero el frontend lo ignora — zero trabajo de API, solo renderizar un recharts BarChart/AreaChart
-- **Sidebar dinámico:** los 3 negocios están hardcodeados como NavLinks; si cambian en DB el sidebar no se actualiza
-- **MRR semántico:** en DetallaNegocio, el MRR se calcula del mes seleccionado (no del mes actual); en meses históricos muestra el MRR de ese mes, no el actual
+_Todos los gaps de la Etapa 5 fueron resueltos — ver historial de cambios_
 
 ## Decisiones técnicas tomadas
 - Acento indigo `#6366f1`, fondo `zinc-950`, sidebar `zinc-900`
@@ -91,6 +89,9 @@ superpanel/
 ## Historial de cambios relevantes
 | Fecha | Cambio |
 |---|---|
+| 2026-06-04 | History sparkline: BarChart recharts en DetallaNegocio; `history` ya venía del backend |
+| 2026-06-04 | Sidebar dinámico: negocios cargados de GET /negocios en montaje, sin hardcodeo |
+| 2026-06-04 | MRR semántico: backend agrega `currentMrr` (CURRENT_DATE); badge "hoy" en meses históricos |
 | 2026-06-04 | Fix deploy: VITE_API_URL en Vercel; railway up debe correr desde server/ |
 | 2026-06-04 | Fix React #31: typeof guard en setError (Login + Dashboard); ErrorState defensivo |
 | 2026-06-04 | Etapa 5: Dashboard Home `/` — GET /dashboard + Dashboard.jsx, redirect login → / |
