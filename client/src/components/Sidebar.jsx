@@ -2,12 +2,19 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Briefcase, User, LogOut, LayoutDashboard,
-  CheckSquare, Dumbbell, Weight, Leaf, Bell, TrendingUp,
+  CheckSquare, Dumbbell, Weight, Leaf, Bell, TrendingUp, Home,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { staggerContainer, staggerItem } from '../lib/animations';
 
 const NAV = [
+  {
+    section: 'Inicio',
+    icon: Home,
+    items: [
+      { to: '/', label: 'Dashboard', icon: Home, end: true },
+    ],
+  },
   {
     section: 'Negocios',
     icon: Briefcase,

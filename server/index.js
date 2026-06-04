@@ -6,6 +6,7 @@ const initDB = require('./src/db/init');
 const authRoutes      = require('./src/routes/auth');
 const personalRoutes  = require('./src/routes/personal');
 const negociosRoutes  = require('./src/routes/negocios');
+const dashboardRoutes = require('./src/routes/dashboard');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use('/auth',      authRoutes);
 app.use('/personal',  personalRoutes);
 app.use('/negocios',  negociosRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 app.get('/health', (_req, res) => res.json({ ok: true, ts: new Date() }));
 
