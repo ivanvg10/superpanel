@@ -35,10 +35,11 @@ router.get('/cuestionarios', async (_req, res) => {
 
 router.put('/cuestionario-base/:id/revisar', async (req, res) => {
   try {
-    await chaifit.query(
-      `UPDATE cuestionario_base SET revisado = true, revisado_en = NOW() WHERE id = $1`,
-      [req.params.id]
+    const { rowCount } = await chaifit.query(
+      `UPDATE cuestionario_base SET revisado = true, revisado_en = NOW() WHERE id = $1 AND tenant_id = $2`,
+      [req.params.id, LEON]
     );
+    if (rowCount === 0) return res.status(404).json({ error: 'No encontrado' });
     res.json({ ok: true });
   } catch (err) {
     console.error('[leon-coach PUT /cuestionario-base/revisar]', err.message);
@@ -48,10 +49,11 @@ router.put('/cuestionario-base/:id/revisar', async (req, res) => {
 
 router.put('/cuestionario-pro/:id/revisar', async (req, res) => {
   try {
-    await chaifit.query(
-      `UPDATE cuestionario_pro SET revisado = true, revisado_en = NOW() WHERE id = $1`,
-      [req.params.id]
+    const { rowCount } = await chaifit.query(
+      `UPDATE cuestionario_pro SET revisado = true, revisado_en = NOW() WHERE id = $1 AND tenant_id = $2`,
+      [req.params.id, LEON]
     );
+    if (rowCount === 0) return res.status(404).json({ error: 'No encontrado' });
     res.json({ ok: true });
   } catch (err) {
     console.error('[leon-coach PUT /cuestionario-pro/revisar]', err.message);
