@@ -7,6 +7,7 @@ const authRoutes      = require('./src/routes/auth');
 const personalRoutes  = require('./src/routes/personal');
 const negociosRoutes  = require('./src/routes/negocios');
 const dashboardRoutes = require('./src/routes/dashboard');
+const leonCoachRoutes = require('./src/routes/leoncoach');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -26,10 +27,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/auth',      authRoutes);
-app.use('/personal',  personalRoutes);
-app.use('/negocios',  negociosRoutes);
-app.use('/dashboard', dashboardRoutes);
+app.use('/auth',       authRoutes);
+app.use('/personal',   personalRoutes);
+app.use('/negocios',   negociosRoutes);
+app.use('/dashboard',  dashboardRoutes);
+app.use('/leon-coach', leonCoachRoutes);
 
 app.get('/health', (_req, res) => res.json({ ok: true, ts: new Date() }));
 

@@ -11,6 +11,7 @@ import {
   Minus, ReceiptText, Settings, BarChart2,
 } from 'lucide-react';
 import api from '../../lib/api';
+import LeonCoachPanel from './LeonCoachPanel';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Modal from '../../components/ui/Modal';
@@ -723,6 +724,9 @@ export default function DetallaNegocio() {
             )}
           </div>
         </div>
+
+        {/* ── Panel León Coach (solo visible para este negocio) ── */}
+        {slug === 'leon-coach' && <LeonCoachPanel />}
 
         {/* ── Pendientes de este negocio ── */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">
