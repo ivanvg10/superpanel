@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const pool = require('../db');
 const authenticate = require('../middleware/authenticate');
+const { esEspejo, resumenEspejo } = require('../services/espejoChaifit');
 
 router.use(authenticate);
 
@@ -97,6 +98,15 @@ router.get('/', async (req, res) => {
 
     const latestWeight = weightLatestRes.rows[0] || null;
     const weight7d     = weight7dRes.rows[0] || null;
+
+    // Espejo: suma ingresos reales (Stripe/pagos) del mes actual al consolidado.
+    const ymActual = new Date().toISOString().slice(0, 7);
+    await Promise.all(businessesRes.rows.map(async (b) => {
+      if (!esEspejo(b.slug)) return;
+      const { byMonth, mrr } = await resumenEspejo(b.slug);
+      b.income_month = Number(b.income_month) + (byMonth[ymActual] || 0);
+      b.mrr          = Number(b.mrr) + mrr;
+    }));
 
     res.json({
       businesses:       businessesRes.rows,

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const pool = require('../db');
 const authenticate = require('../middleware/authenticate');
+const { esEspejo, resumenEspejo, detalleEspejo } = require('../services/espejoChaifit');
 
 router.use(authenticate);
 
@@ -39,6 +40,16 @@ router.get('/', async (req, res) => {
       WHERE b.user_id = $1
       ORDER BY b.created_at ASC
     `, [req.user.id]);
+
+    // Espejo: suma ingresos reales (Stripe/pagos) del mes actual a los negocios conectados.
+    const ymActual = new Date().toISOString().slice(0, 7);
+    await Promise.all(rows.map(async (b) => {
+      if (!esEspejo(b.slug)) return;
+      const { byMonth, mrr } = await resumenEspejo(b.slug);
+      b.income_month = Number(b.income_month) + (byMonth[ymActual] || 0);
+      b.mrr          = Number(b.mrr) + mrr;
+    }));
+
     res.json(rows);
   } catch (err) {
     console.error('[negocios GET /]', err.message);
@@ -100,7 +111,29 @@ router.get('/:slug', async (req, res) => {
       [business.id]
     );
 
-    res.json({ business, transactions, todos, history, currentMrr: Number(mrrRow.current_mrr) });
+    // Espejo: fusiona ingresos reales de Chai Fit (solo lectura) con lo manual.
+    let finalTxns    = transactions;
+    let finalHistory = history;
+    let currentMrr   = Number(mrrRow.current_mrr);
+
+    if (esEspejo(slug)) {
+      const [{ byMonth, mrr }, espejoTxns] = await Promise.all([
+        resumenEspejo(slug),
+        detalleEspejo(slug, targetMonth),
+      ]);
+      currentMrr += mrr;
+      finalTxns = [...espejoTxns, ...transactions]; // las del espejo arriba
+
+      const histMap = new Map(history.map((h) => [h.month, { ...h }]));
+      for (const [ym, income] of Object.entries(byMonth)) {
+        const cur = histMap.get(ym);
+        if (cur) cur.income = Number(cur.income) + income;
+        else histMap.set(ym, { month: ym, income, expenses: 0 });
+      }
+      finalHistory = [...histMap.values()].sort((a, b) => a.month.localeCompare(b.month));
+    }
+
+    res.json({ business, transactions: finalTxns, todos, history: finalHistory, currentMrr });
   } catch (err) {
     console.error('[negocios GET /:slug]', err.message);
     res.status(500).json({ error: 'Error del servidor' });

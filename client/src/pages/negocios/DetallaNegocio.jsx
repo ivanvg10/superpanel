@@ -8,10 +8,9 @@ import {
   ArrowLeft, ArrowUpRight, Plus, Trash2,
   ChevronLeft, ChevronRight, TrendingUp, TrendingDown,
   Repeat2, CheckSquare, Circle, CheckCheck, ExternalLink,
-  Minus, ReceiptText, Settings, BarChart2,
+  Minus, ReceiptText, Settings, BarChart2, Zap,
 } from 'lucide-react';
 import api from '../../lib/api';
-import LeonCoachPanel from './LeonCoachPanel';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Modal from '../../components/ui/Modal';
@@ -189,6 +188,11 @@ function TransactionRow({ txn, onDelete }) {
               <Repeat2 className="w-2.5 h-2.5" />Recurrente
             </span>
           )}
+          {txn.origen === 'espejo' && (
+            <span className="flex items-center gap-1 text-[11px] text-amber-400/80">
+              <Zap className="w-2.5 h-2.5" />Auto
+            </span>
+          )}
         </div>
       </div>
 
@@ -199,13 +203,17 @@ function TransactionRow({ txn, onDelete }) {
         {isIncome ? '+' : '-'}{fmx(txn.amount)}
       </span>
 
-      {/* Delete */}
-      <button
-        onClick={() => onDelete(txn.id)}
-        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all flex-shrink-0"
-      >
-        <Trash2 className="w-3.5 h-3.5" />
-      </button>
+      {/* Delete — las filas espejo (origen externo) son de solo lectura */}
+      {txn.origen === 'espejo' ? (
+        <span className="w-[30px] flex-shrink-0" aria-hidden />
+      ) : (
+        <button
+          onClick={() => onDelete(txn.id)}
+          className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all flex-shrink-0"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </button>
+      )}
     </motion.div>
   );
 }
@@ -726,7 +734,6 @@ export default function DetallaNegocio() {
         </div>
 
         {/* ── Panel León Coach (solo visible para este negocio) ── */}
-        {slug === 'leon-coach' && <LeonCoachPanel />}
 
         {/* ── Pendientes de este negocio ── */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">

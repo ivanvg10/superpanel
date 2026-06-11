@@ -1,7 +1,7 @@
 # Superpanel — Contexto del Proyecto
 
 ## Qué es
-App web interna (un solo usuario: Iván León) como torre de control de León Ventures. Centraliza finanzas, operaciones y tracking personal de todos los negocios y vida personal.
+App web interna (un solo usuario: Iván León) como torre de control de **León Ventures**. Centraliza finanzas y tracking personal. **Arquitectura:** León Ventures NO gestiona los negocios — solo LEE sus datos como espejo para tener gestión financiera global automática. Cada negocio se opera en su propio admin (`chaifit/superadmin`, `leoncoach/superadmin`). Aquí se sigue ingresando dinero manual de otras cosas, y se espejan los ingresos reales (Stripe) de los negocios conectados.
 
 ## URLs de producción
 | Servicio | URL |
@@ -40,7 +40,8 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 - **Etapa 5 ✅** — Dashboard Home `/`: GET /dashboard (Promise.all 8 queries), consolidado negocios, panel fitness (cannabis streak / gym / box / peso+delta), tareas urgentes, recordatorios próximos/vencidos
 - **Etapa 6 ✅** — Polish DetallaNegocio: history sparkline (BarChart 6 meses), sidebar dinámico desde DB, MRR semántico con `currentMrr` siempre del mes en curso
 - **Etapa 7 ✅** — CRUD negocios: POST /negocios (nuevo endpoint, auto-slug), modal "Nuevo negocio" en VistaGeneral, modal "Editar negocio" (Settings) en DetallaNegocio, sidebar se refresca vía evento `negocios-updated`
-- **Etapa 8 ✅** — Panel León Coach integrado en `/negocios/leon-coach`. Backend: `server/src/db/chaifit.js` (pool secundario a `CHAIFIT_DATABASE_URL`) + `server/src/routes/leoncoach.js` (7 endpoints, todos protegidos por `authenticate`, consultan BD de Chai Fit directamente). Frontend: `LeonCoachPanel.jsx` (4 tabs: Cuestionarios, Embudo, Clientes, Planes) en Tailwind zinc/indigo; renderizado condicional en `DetallaNegocio.jsx` cuando `slug === 'leon-coach'`.
+- **Etapa 8 ⚠️ REVERTIDA** — Panel operativo León Coach (`LeonCoachPanel.jsx` + `routes/leoncoach.js`, 7 endpoints, 4 tabs). Eliminado en Etapa 9: ese funnel/cuestionarios/clientes se mueve a `leoncoach/superadmin`. Se conserva solo el pool `chaifit.js` (lo usa el espejo).
+- **Etapa 9 ✅ (2026-06-11)** — **León Ventures = espejo financiero global.** Se eliminó el panel operativo de León Coach (`routes/leoncoach.js`, `LeonCoachPanel.jsx`, su registro `/leon-coach` en `server/index.js`, import+render en `DetallaNegocio.jsx`). Nuevo `server/src/services/espejoChaifit.js`: lee ingresos reales en vivo de la BD de Chai Fit, solo lectura, tolerante a fallos (try/catch → si falla, sigue lo manual). `chai-fit` ← tabla `pagos` (`estado='completado'`, Stripe SaaS) + MRR de `suscripciones` activas. `leon-coach` ← `pagos_clientes` JOIN clientes (tenant LEON). Cableado en `negocios.js` (GET / y GET /:slug) y `dashboard.js`. Filas espejo: `origen:'espejo'`, badge "Auto" (Zap), no editables/borrables. Las transacciones manuales no cambian.
 
 ## Ideas para siguiente etapa (no comprometidas)
 - **Notificaciones / alertas** — recordatorios vencidos con badge en sidebar, push notification o email
@@ -58,8 +59,9 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 - `cannabis_log` y `weight_log` tienen `UNIQUE(user_id, date)` → `ON CONFLICT DO UPDATE`
 - CORS: `CLIENT_URL` soporta múltiples origins separados por coma
 - En Login y cualquier catch de API: usar `typeof msg === 'string' ? msg : 'fallback'` — las 404 de Vercel devuelven `{error: {code, message}}` (objeto) no string
-- **Conexión dual de BD:** `server/src/db/index.js` → Superpanel DB (principal). `server/src/db/chaifit.js` → BD de Chai Fit (Railway, pool max 5, solo para rutas `/leon-coach`). Ambas usan `rejectUnauthorized: false` en producción.
-- **León Coach slug:** `'leon-coach'` hardcodeado en seed.js — usar este valor exacto para condicionales, no derivarlo del nombre.
+- **Conexión dual de BD:** `server/src/db/index.js` → Superpanel DB (principal). `server/src/db/chaifit.js` → BD de Chai Fit (Railway, pool max 5, usado por el espejo `espejoChaifit.js`). Ambas usan `rejectUnauthorized: false` en producción.
+- **Espejo de ingresos (`services/espejoChaifit.js`):** solo lectura, tolerante a fallos. Negocios espejados: `chai-fit` (tabla `pagos`, MRR de `suscripciones`) y `leon-coach` (`pagos_clientes` tenant LEON). ⚠️ `pagos` nunca se SELECT en el código de Chai Fit; se asumió timestamp `creado_en` (convención del repo) — verificar si chai-fit sale en 0.
+- **Slugs hardcodeados:** `'chai-fit'` y `'leon-coach'` en seed.js — valores exactos para condicionales del espejo, no derivarlos del nombre.
 
 ## Variables de entorno Railway (superpanel-api)
 ```
@@ -67,16 +69,9 @@ CLIENT_URL=https://superpanel-eight.vercel.app,https://superpanel.vercel.app
 NODE_ENV=production
 DATABASE_URL=<postgres railway internal>
 JWT_SECRET=<secreto>
-CHAIFIT_DATABASE_URL=<postgres railway de Chai Fit>
-LC_PRICE_BASE_MENSUAL=<price_id stripe>
-LC_PRICE_BASE_TRIMESTRAL=<price_id stripe>
-LC_PRICE_BASE_SEMESTRAL=<price_id stripe>
-LC_PRICE_BASE_ANUAL=<price_id stripe>
-LC_PRICE_PRO_MENSUAL=<price_id stripe>
-LC_PRICE_PRO_TRIMESTRAL=<price_id stripe>
-LC_PRICE_PRO_SEMESTRAL=<price_id stripe>
-LC_PRICE_PRO_ANUAL=<price_id stripe>
+CHAIFIT_DATABASE_URL=<postgres railway de Chai Fit>   # usado por el espejo de ingresos
 ```
+> Las `LC_PRICE_*` quedaron obsoletas en Etapa 9 (el endpoint `/leon-coach/planes` se eliminó). Se pueden borrar de Railway.
 
 ## Variables de entorno Vercel (superpanel frontend)
 ```
@@ -96,8 +91,7 @@ superpanel/
 │   │       ├── Personal/
 │   │       └── negocios/
 │   │           ├── index.jsx        # VistaGeneral
-│   │           ├── DetallaNegocio.jsx
-│   │           └── LeonCoachPanel.jsx  # Panel ⚡ 4 tabs (Cuestionarios/Embudo/Clientes/Planes)
+│   │           └── DetallaNegocio.jsx
 │   └── vercel.json          # SPA rewrite + security headers
 ├── server/          # Express
 │   ├── src/
@@ -105,7 +99,9 @@ superpanel/
 │   │   │   ├── index.js     # pool principal (Superpanel DB)
 │   │   │   ├── init.js
 │   │   │   └── chaifit.js   # pool secundario (Chai Fit DB via CHAIFIT_DATABASE_URL)
-│   │   └── routes/          # auth, personal, negocios, dashboard, leoncoach
+│   │   ├── services/
+│   │   │   └── espejoChaifit.js  # espejo de ingresos solo-lectura (chai-fit / leon-coach)
+│   │   └── routes/          # auth, personal, negocios, dashboard
 │   ├── index.js
 │   └── railway.json
 ├── DESIGN_SYSTEM.md
@@ -115,7 +111,8 @@ superpanel/
 ## Historial de cambios relevantes
 | Fecha | Cambio |
 |---|---|
-| 2026-06-05 | Etapa 8: Panel León Coach integrado — LeonCoachPanel.jsx (4 tabs), pool chaifit.js, 7 endpoints /leon-coach/*, fix IDOR tenant_id en revisar |
+| 2026-06-11 | Etapa 9: León Ventures = espejo financiero. Eliminado panel operativo León Coach; nuevo services/espejoChaifit.js (ingresos reales de chai-fit `pagos` + leon-coach `pagos_clientes`), cableado en negocios.js y dashboard.js, filas espejo no editables |
+| 2026-06-05 | Etapa 8: Panel León Coach integrado — LeonCoachPanel.jsx (4 tabs), pool chaifit.js, 7 endpoints /leon-coach/*, fix IDOR tenant_id en revisar (REVERTIDO en Etapa 9) |
 | 2026-06-04 | Etapa 7: CRUD negocios — POST /negocios, modal crear en VistaGeneral, modal editar en DetallaNegocio, sidebar refresca vía evento |
 | 2026-06-04 | History sparkline: BarChart recharts en DetallaNegocio; `history` ya venía del backend |
 | 2026-06-04 | Sidebar dinámico: negocios cargados de GET /negocios en montaje, sin hardcodeo |
