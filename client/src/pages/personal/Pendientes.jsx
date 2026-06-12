@@ -36,7 +36,7 @@ function formatDate(str) {
   if (diff === 1) return { label: 'Mañana', cls: 'text-ios-yellow' };
   return {
     label: d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' }),
-    cls: 'text-ios-label0',
+    cls: 'text-ios-label2',
   };
 }
 
@@ -67,7 +67,7 @@ function TodoCard({ todo, onToggle, onEdit, onDelete }) {
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-ios-label0' : 'text-ios-label'}`}>
+        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-ios-label2' : 'text-ios-label'}`}>
           {todo.title}
         </p>
         {todo.description && (
@@ -249,7 +249,7 @@ export default function Pendientes() {
   const PRIORITY_LABELS = { urgent: 'Urgente', high: 'Alta', medium: 'Media', low: 'Baja' };
   const PRIORITY_COLORS = {
     urgent: 'text-ios-red', high: 'text-ios-orange',
-    medium: 'text-ios-yellow', low: 'text-ios-label0',
+    medium: 'text-ios-yellow', low: 'text-ios-label2',
   };
 
   if (loading) return <PageLoader />;
@@ -261,7 +261,7 @@ export default function Pendientes() {
       <div className="border-b border-ios-sep px-5 pt-7 pb-4 flex items-center justify-between sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div>
           <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Pendientes</h2>
-          <p className="text-sm text-ios-label0 mt-0.5">
+          <p className="text-sm text-ios-label2 mt-0.5">
             {pending.length} pendiente{pending.length !== 1 ? 's' : ''} · {done.length} completada{done.length !== 1 ? 's' : ''}
           </p>
         </div>

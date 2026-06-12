@@ -54,23 +54,26 @@ async function initDB() {
       updated_at  TIMESTAMP DEFAULT NOW()
     );
 
-    CREATE TABLE IF NOT EXISTS gym_sessions (
-      id               SERIAL PRIMARY KEY,
-      user_id          INTEGER REFERENCES users(id) ON DELETE CASCADE,
-      date             DATE NOT NULL DEFAULT CURRENT_DATE,
-      duration_minutes INTEGER,
-      notes            TEXT,
-      created_at       TIMESTAMP DEFAULT NOW()
+    -- Tracker de hábitos: cada hábito tiene una meta semanal (veces/semana).
+    CREATE TABLE IF NOT EXISTS habits (
+      id          SERIAL PRIMARY KEY,
+      user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      name        VARCHAR(100) NOT NULL,
+      color       VARCHAR(20)  DEFAULT 'blue',
+      icon        VARCHAR(40)  DEFAULT 'check',
+      weekly_goal INTEGER NOT NULL DEFAULT 7,
+      sort_order  INTEGER DEFAULT 0,
+      archived    BOOLEAN DEFAULT FALSE,
+      created_at  TIMESTAMP DEFAULT NOW()
     );
 
-    CREATE TABLE IF NOT EXISTS box_sessions (
-      id               SERIAL PRIMARY KEY,
-      user_id          INTEGER REFERENCES users(id) ON DELETE CASCADE,
-      date             DATE NOT NULL DEFAULT CURRENT_DATE,
-      duration_minutes INTEGER,
-      rounds           INTEGER,
-      notes            TEXT,
-      created_at       TIMESTAMP DEFAULT NOW()
+    -- Un check = el hábito se cumplió ese día (1 por día como máximo).
+    CREATE TABLE IF NOT EXISTS habit_checks (
+      id         SERIAL PRIMARY KEY,
+      habit_id   INTEGER REFERENCES habits(id) ON DELETE CASCADE,
+      date       DATE NOT NULL DEFAULT CURRENT_DATE,
+      created_at TIMESTAMP DEFAULT NOW(),
+      UNIQUE(habit_id, date)
     );
 
     CREATE TABLE IF NOT EXISTS reminders (

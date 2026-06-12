@@ -1,11 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Briefcase, User } from 'lucide-react';
+import { Home, Briefcase, Target, ListChecks } from 'lucide-react';
 
 // Tab bar inferior estilo iOS. Vive dentro del phone-shell (no es overlay fijo).
 const TABS = [
-  { to: '/',                     label: 'Inicio',   icon: Home,      match: '/',          exact: true },
-  { to: '/negocios',             label: 'Negocios', icon: Briefcase, match: '/negocios' },
-  { to: '/personal/pendientes',  label: 'Personal', icon: User,      match: '/personal' },
+  { to: '/',                     label: 'Inicio',     icon: Home,       match: '/',          exact: true },
+  { to: '/negocios',             label: 'Negocios',   icon: Briefcase,  match: '/negocios' },
+  { to: '/habitos',              label: 'Hábitos',    icon: Target,     match: '/habitos' },
+  { to: '/personal/pendientes',  label: 'Pendientes', icon: ListChecks, match: '/personal' },
 ];
 
 export default function BottomTabBar() {

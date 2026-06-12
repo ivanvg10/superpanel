@@ -5,6 +5,7 @@ const cors = require('cors');
 const initDB = require('./src/db/init');
 const authRoutes      = require('./src/routes/auth');
 const personalRoutes  = require('./src/routes/personal');
+const habitsRoutes    = require('./src/routes/habits');
 const negociosRoutes  = require('./src/routes/negocios');
 const dashboardRoutes = require('./src/routes/dashboard');
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 
 app.use('/auth',       authRoutes);
 app.use('/personal',   personalRoutes);
+app.use('/habits',     habitsRoutes);
 app.use('/negocios',   negociosRoutes);
 app.use('/dashboard',  dashboardRoutes);
 

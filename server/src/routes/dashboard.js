@@ -10,8 +10,7 @@ router.get('/', async (req, res) => {
   try {
     const [
       businessesRes,
-      gymWeekRes,
-      boxWeekRes,
+      habitsRes,
       todosRes,
       remindersRes,
     ] = await Promise.all([
@@ -41,15 +40,16 @@ router.get('/', async (req, res) => {
         ORDER BY b.created_at ASC
       `, [uid]),
 
-      // Sesiones de gym en los últimos 7 días
+      // Hábitos con progreso de la semana actual y check de hoy
       pool.query(
-        `SELECT COUNT(*) AS count FROM gym_sessions WHERE user_id = $1 AND date >= CURRENT_DATE - INTERVAL '6 days'`,
-        [uid]
-      ),
-
-      // Sesiones de box en los últimos 7 días
-      pool.query(
-        `SELECT COUNT(*) AS count FROM box_sessions WHERE user_id = $1 AND date >= CURRENT_DATE - INTERVAL '6 days'`,
+        `SELECT h.id, h.name, h.color, h.weekly_goal,
+           (SELECT COUNT(*)::int FROM habit_checks c
+              WHERE c.habit_id = h.id AND c.date >= date_trunc('week', CURRENT_DATE)) AS week_count,
+           EXISTS(SELECT 1 FROM habit_checks c
+              WHERE c.habit_id = h.id AND c.date = CURRENT_DATE) AS done_today
+         FROM habits h
+         WHERE h.user_id = $1 AND h.archived = FALSE
+         ORDER BY h.sort_order ASC, h.id ASC`,
         [uid]
       ),
 
@@ -86,8 +86,7 @@ router.get('/', async (req, res) => {
 
     res.json({
       businesses:       businessesRes.rows,
-      gym_week:         parseInt(gymWeekRes.rows[0].count, 10),
-      box_week:         parseInt(boxWeekRes.rows[0].count, 10),
+      habits:           habitsRes.rows,
       urgent_todos:     todosRes.rows,
       reminders_due:    remindersRes.rows,
     });

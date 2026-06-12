@@ -28,7 +28,8 @@ superpanel/
 │       └── pages/
 │           ├── Login.jsx
 │           ├── negocios/    Vista general + detalle por negocio
-│           └── personal/    Pendientes, Gym, Box, Recordatorios
+│           ├── habitos/      Tracker de hábitos (check diario + meta semanal)
+│           └── personal/    Pendientes, Recordatorios
 │
 ├── server/          Node + Express — se deploya en Railway
 │   └── src/
@@ -238,7 +239,6 @@ curl http://localhost:3001/health
 | Negocios | Chai Fit          | Detalle, transacciones por mes, tareas pendientes    |
 | Negocios | León Coach        | Ídem                                                 |
 | Negocios | San Charly MX     | Ídem                                                 |
-| Personal | Pendientes        | CRUD de tareas, filtro por proyecto, agrupadas por prioridad |
-| Personal | Gym               | Registro de sesiones con stats semanales/mensuales   |
-| Personal | Box               | Ídem + campo de rounds                               |
-| Personal | Recordatorios     | Con fecha/hora, toggle completado, vencidos resaltados |
+| Hábitos  | Tracker           | Check diario + meta semanal + racha de semanas (Gym, Box, etc.) |
+| Pendientes | Tareas          | CRUD, filtro por proyecto, agrupadas por prioridad   |
+| Pendientes | Recordatorios   | Con fecha/hora, toggle completado, vencidos resaltados |

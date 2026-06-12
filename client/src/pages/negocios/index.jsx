@@ -53,7 +53,7 @@ function StatusBadge({ status }) {
 }
 
 function TrendIndicator({ value }) {
-  if (!value || value === 0) return <Minus className="w-3.5 h-3.5 text-ios-label0" />;
+  if (!value || value === 0) return <Minus className="w-3.5 h-3.5 text-ios-label2" />;
   return value > 0
     ? <TrendingUp  className="w-3.5 h-3.5 text-ios-green" />
     : <TrendingDown className="w-3.5 h-3.5 text-ios-red" />;
@@ -103,7 +103,7 @@ function NegocioCard({ business }) {
           {metrics.map(({ label, value, mono }) => (
             <div key={label} className="flex justify-between items-center">
               <span className="text-xs text-ios-label3">{label}</span>
-              <span className={`text-xs ${mono ? 'font-mono text-ios-label2' : 'text-ios-label0'}`}>
+              <span className={`text-xs ${mono ? 'font-mono text-ios-label2' : 'text-ios-label2'}`}>
                 {value}
               </span>
             </div>
@@ -116,7 +116,7 @@ function NegocioCard({ business }) {
           <div className="flex items-center gap-1.5">
             <TrendIndicator value={net} />
             <span className={`font-mono text-sm font-semibold ${
-              net > 0 ? 'text-ios-green' : net < 0 ? 'text-ios-red' : 'text-ios-label0'
+              net > 0 ? 'text-ios-green' : net < 0 ? 'text-ios-red' : 'text-ios-label2'
             }`}>
               {income > 0 || expenses > 0 ? fmx(net) : '—'}
             </span>
@@ -175,7 +175,7 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
               className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
                 form.status === id
                   ? 'bg-ios-blue text-white'
-                  : 'text-ios-label0 hover:text-ios-label hover:bg-ios-elev2/60'
+                  : 'text-ios-label2 hover:text-ios-label hover:bg-ios-elev2/60'
               }`}
             >
               {label}
@@ -196,7 +196,7 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
               className={`flex items-center gap-2 px-3 py-2 rounded-ios border text-xs font-medium transition-all ${
                 form.color === id
                   ? 'border-ios-blue/60 bg-ios-blue/10 text-ios-label'
-                  : 'border-ios-sep text-ios-label0 hover:border-ios-sep hover:text-ios-label'
+                  : 'border-ios-sep text-ios-label2 hover:border-ios-sep hover:text-ios-label'
               }`}
             >
               <span className={`w-2.5 h-2.5 rounded-full ${dot}`} />
@@ -244,7 +244,7 @@ function StatCard({ label, value, sub, highlight }) {
         ? 'bg-ios-blue/10 border-ios-blue/20'
         : 'bg-ios-elev2/50 border-ios-sep'
     }`}>
-      <p className="text-[11px] font-medium text-ios-label0 uppercase tracking-wide mb-2">{label}</p>
+      <p className="text-[11px] font-medium text-ios-label2 uppercase tracking-wide mb-2">{label}</p>
       <p className={`font-mono text-2xl font-bold leading-none ${highlight ? 'text-ios-blue' : 'text-ios-label'}`}>
         {value}
       </p>
@@ -309,7 +309,7 @@ function VistaGeneral() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Negocios</h2>
-            <p className="text-sm text-ios-label0 mt-0.5 capitalize">Vista consolidada · {mesActual}</p>
+            <p className="text-sm text-ios-label2 mt-0.5 capitalize">Vista consolidada · {mesActual}</p>
           </div>
           <Button
             variant="secondary"

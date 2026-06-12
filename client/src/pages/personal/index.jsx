@@ -1,20 +1,16 @@
 import { Routes, Route, Navigate, NavLink } from 'react-router-dom';
 import Pendientes    from './Pendientes';
-import Gym           from './Gym';
-import Box           from './Box';
 import Recordatorios from './Recordatorios';
 
-// Subsecciones de Personal. En móvil no hay sidebar, así que se navega con estos chips.
+// Subsecciones navegables por chips (la app no tiene sidebar).
 const SUB = [
   { to: 'pendientes',    label: 'Pendientes' },
-  { to: 'gym',           label: 'Gym' },
-  { to: 'box',           label: 'Box' },
   { to: 'recordatorios', label: 'Recordatorios' },
 ];
 
 function SubNav() {
   return (
-    <div className="md:hidden flex gap-2 overflow-x-auto px-4 py-3 border-b border-ios-sep [&::-webkit-scrollbar]:hidden">
+    <div className="flex gap-2 overflow-x-auto px-4 py-3 border-b border-ios-sep [&::-webkit-scrollbar]:hidden">
       {SUB.map((s) => (
         <NavLink
           key={s.to}
@@ -39,8 +35,6 @@ export default function PersonalPage() {
       <Routes>
         <Route index                element={<Navigate to="pendientes" replace />} />
         <Route path="pendientes"    element={<Pendientes />} />
-        <Route path="gym"           element={<Gym />} />
-        <Route path="box"           element={<Box />} />
         <Route path="recordatorios" element={<Recordatorios />} />
         <Route path="*"             element={<Navigate to="pendientes" replace />} />
       </Routes>

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  Dumbbell, CheckCircle2, Bell, ChevronRight,
-  TrendingUp, TrendingDown, Building2, AlertCircle, Circle, Sparkles,
+  CheckCircle2, Bell, ChevronRight, Check,
+  TrendingUp, TrendingDown, Building2, AlertCircle, Circle,
 } from 'lucide-react';
 import api from '../lib/api';
 import PageLoader, { ErrorState } from '../components/ui/PageLoader';
@@ -144,6 +144,11 @@ function BalanceHero({ net, mrr, income, expenses, hasData }) {
 
 // ─── Configuración por negocio ──────────────────────────────────────────────────
 
+const HABIT_TONE = {
+  blue: 'bg-ios-blue', green: 'bg-ios-green', orange: 'bg-ios-orange', red: 'bg-ios-red',
+  purple: 'bg-ios-purple', teal: 'bg-ios-teal', pink: 'bg-ios-pink', yellow: 'bg-ios-yellow',
+};
+
 const BIZ_TONE = { emerald: 'green', blue: 'blue', amber: 'orange' };
 const STATUS_CFG = {
   live:         { label: 'Live',   cls: 'bg-ios-green/15  text-ios-green'  },
@@ -179,7 +184,7 @@ export default function Dashboard() {
   if (loading) return <PageLoader rows={4} />;
   if (error)   return <ErrorState message={error} onRetry={load} />;
 
-  const { businesses, urgent_todos, reminders_due } = data;
+  const { businesses, urgent_todos, reminders_due, habits = [] } = data;
 
   const totalMRR      = businesses.reduce((s, b) => s + Number(b.mrr || 0), 0);
   const totalIncome   = businesses.reduce((s, b) => s + Number(b.income_month || 0), 0);
@@ -258,21 +263,43 @@ export default function Dashboard() {
           </motion.div>
         </section>
 
-        {/* ── Actividad (fitness) ── */}
+        {/* ── Hábitos ── */}
         <section>
-          <GroupLabel>Actividad</GroupLabel>
+          <GroupLabel
+            action={
+              <Link to="/habitos" className="flex items-center gap-0.5 text-[13px] text-ios-blue font-medium">
+                Ver todo <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            }
+          >
+            Hábitos de hoy
+          </GroupLabel>
           <InsetCard>
-            <Row
-              icon={Dumbbell} tone="orange" label="Gym esta semana"
-              value={data.gym_week > 0 ? `${data.gym_week}` : '0'}
-              valueColor={data.gym_week > 0 ? 'text-ios-label' : 'text-ios-label3'}
-            />
-            <Row
-              icon={Dumbbell} tone="red" label="Box esta semana"
-              value={data.box_week > 0 ? `${data.box_week}` : '0'}
-              valueColor={data.box_week > 0 ? 'text-ios-label' : 'text-ios-label3'}
-              last
-            />
+            {habits.length === 0 ? (
+              <Row icon={CheckCircle2} tone="green" label="Sin hábitos aún" valueColor="text-ios-label3" />
+            ) : (
+              habits.map((h) => {
+                const met = h.week_count >= h.weekly_goal;
+                return (
+                  <Link key={h.id} to="/habitos" className="block active:bg-ios-elev2 transition-colors">
+                    <div className="flex items-center gap-3 px-4 py-3 min-h-[52px]">
+                      <div className={`w-7 h-7 rounded-[7px] flex items-center justify-center flex-shrink-0 ${HABIT_TONE[h.color] || HABIT_TONE.blue}`}>
+                        <span className="text-[13px] font-bold text-white">{h.name.charAt(0).toUpperCase()}</span>
+                      </div>
+                      <span className="text-[15px] text-ios-label flex-1 truncate">{h.name}</span>
+                      <span className={`text-[13px] font-mono ${met ? 'text-ios-green' : 'text-ios-label2'}`}>
+                        {h.week_count}/{h.weekly_goal}
+                      </span>
+                      <span className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        h.done_today ? 'bg-ios-green' : 'border-2 border-ios-label3'
+                      }`}>
+                        {h.done_today && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })
+            )}
           </InsetCard>
         </section>
 

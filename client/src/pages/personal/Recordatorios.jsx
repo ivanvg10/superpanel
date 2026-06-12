@@ -47,7 +47,7 @@ function ReminderCard({ reminder, onToggle, onDelete }) {
       </button>
 
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-ios-label0' : 'text-ios-label'}`}>
+        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-ios-label2' : 'text-ios-label'}`}>
           {reminder.title}
         </p>
         {reminder.description && (
@@ -55,7 +55,7 @@ function ReminderCard({ reminder, onToggle, onDelete }) {
         )}
         {due && (
           <div className={`flex items-center gap-1 mt-2 text-xs font-medium ${
-            done ? 'text-ios-label3' : due.isPast ? 'text-ios-red' : 'text-ios-label0'
+            done ? 'text-ios-label3' : due.isPast ? 'text-ios-red' : 'text-ios-label2'
           }`}>
             <CalendarClock className="w-3 h-3" />
             {due.isPast && !done ? 'Vencido · ' : ''}{due.label}
@@ -152,7 +152,7 @@ export default function Recordatorios() {
         <div>
           <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Recordatorios</h2>
           <p className="text-sm mt-0.5">
-            <span className="text-ios-label0">{pending.length} pendiente{pending.length !== 1 ? 's' : ''}</span>
+            <span className="text-ios-label2">{pending.length} pendiente{pending.length !== 1 ? 's' : ''}</span>
             {overdueCount > 0 && (
               <span className="text-ios-red ml-2">· {overdueCount} vencido{overdueCount !== 1 ? 's' : ''}</span>
             )}

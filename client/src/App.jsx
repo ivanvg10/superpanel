@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import NegociosPage from './pages/negocios/index';
+import HabitosPage from './pages/habitos/index';
 import PersonalPage from './pages/personal/index';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
             <Route element={<Layout />}>
               <Route index element={<Dashboard />} />
               <Route path="negocios/*" element={<NegociosPage />} />
+              <Route path="habitos" element={<HabitosPage />} />
               <Route path="personal/*" element={<PersonalPage />} />
             </Route>
           </Route>

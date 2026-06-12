@@ -103,7 +103,7 @@ function HistoryTooltip({ active, payload, label }) {
       {payload.map((p) => (
         <div key={p.dataKey} className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: p.fill }} />
-          <span className="text-ios-label0">{p.name}:</span>
+          <span className="text-ios-label2">{p.name}:</span>
           <span className="font-mono text-ios-label">{fmx(p.value)}</span>
         </div>
       ))}
@@ -116,7 +116,7 @@ function MonthPicker({ value, onChange }) {
     <div className="flex items-center gap-2">
       <button
         onClick={() => onChange(shiftMonth(value, -1))}
-        className="p-1.5 rounded-lg text-ios-label0 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
+        className="p-1.5 rounded-lg text-ios-label2 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
       >
         <ChevronLeft className="w-3.5 h-3.5" />
       </button>
@@ -125,7 +125,7 @@ function MonthPicker({ value, onChange }) {
       </span>
       <button
         onClick={() => onChange(shiftMonth(value, 1))}
-        className="p-1.5 rounded-lg text-ios-label0 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
+        className="p-1.5 rounded-lg text-ios-label2 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
       >
         <ChevronRight className="w-3.5 h-3.5" />
       </button>
@@ -145,7 +145,7 @@ function StatTile({ label, value, color = 'default', icon: Icon }) {
     <div className="bg-ios-elev border border-ios-sep rounded-ios p-4 shadow-card">
       <div className="flex items-center gap-1.5 mb-2">
         {Icon && <Icon className="w-3 h-3 text-ios-label3" />}
-        <p className="text-[11px] font-medium text-ios-label0 uppercase tracking-wide">{label}</p>
+        <p className="text-[11px] font-medium text-ios-label2 uppercase tracking-wide">{label}</p>
       </div>
       <p className={`font-mono font-bold text-xl leading-none ${colors[color]}`}>{value}</p>
     </div>
@@ -179,7 +179,7 @@ function TransactionRow({ txn, onDelete }) {
         </p>
         <div className="flex items-center gap-2 mt-0.5">
           {txn.category && (
-            <span className="text-[11px] bg-ios-elev2 text-ios-label0 px-1.5 py-0.5 rounded border border-ios-sep">
+            <span className="text-[11px] bg-ios-elev2 text-ios-label2 px-1.5 py-0.5 rounded border border-ios-sep">
               {txn.category}
             </span>
           )}
@@ -219,7 +219,7 @@ function TransactionRow({ txn, onDelete }) {
 }
 
 function PendienteTodo({ todo }) {
-  const PRIORITY_TEXT = { urgent: 'text-ios-red', high: 'text-ios-orange', medium: 'text-ios-yellow', low: 'text-ios-label0' };
+  const PRIORITY_TEXT = { urgent: 'text-ios-red', high: 'text-ios-orange', medium: 'text-ios-yellow', low: 'text-ios-label2' };
   return (
     <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-ios border border-ios-sep bg-ios-elev/50">
       <PriorityDot priority={todo.priority} />
@@ -264,7 +264,7 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
               className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
                 form.status === id
                   ? 'bg-ios-blue text-white'
-                  : 'text-ios-label0 hover:text-ios-label hover:bg-ios-elev2/60'
+                  : 'text-ios-label2 hover:text-ios-label hover:bg-ios-elev2/60'
               }`}
             >
               {label}
@@ -285,7 +285,7 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
               className={`flex items-center gap-2 px-3 py-2 rounded-ios border text-xs font-medium transition-all ${
                 form.color === id
                   ? 'border-ios-blue/60 bg-ios-blue/10 text-ios-label'
-                  : 'border-ios-sep text-ios-label0 hover:border-ios-sep hover:text-ios-label'
+                  : 'border-ios-sep text-ios-label2 hover:border-ios-sep hover:text-ios-label'
               }`}
             >
               <span className={`w-2.5 h-2.5 rounded-full ${dot}`} />
@@ -343,7 +343,7 @@ function TransactionForm({ form, setForm, onSubmit, onClose, saving }) {
               type="button"
               onClick={() => setForm((f) => ({ ...f, type: id, category: '' }))}
               className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-                form.type === id ? active : 'text-ios-label0 hover:text-ios-label hover:bg-ios-elev2/60'
+                form.type === id ? active : 'text-ios-label2 hover:text-ios-label hover:bg-ios-elev2/60'
               }`}
             >
               {label}
@@ -554,7 +554,7 @@ export default function DetallaNegocio() {
                 {business.name}
               </h2>
               {business.description && (
-                <p className="text-xs text-ios-label0 mt-0.5">{business.description}</p>
+                <p className="text-xs text-ios-label2 mt-0.5">{business.description}</p>
               )}
             </div>
 
@@ -583,7 +583,7 @@ export default function DetallaNegocio() {
             )}
             <button
               onClick={openEditModal}
-              className="p-2 rounded-ios text-ios-label0 hover:text-ios-label hover:bg-ios-elev2 border border-transparent hover:border-ios-sep transition-all"
+              className="p-2 rounded-ios text-ios-label2 hover:text-ios-label hover:bg-ios-elev2 border border-transparent hover:border-ios-sep transition-all"
               title="Editar negocio"
             >
               <Settings className="w-4 h-4" />
@@ -636,7 +636,7 @@ export default function DetallaNegocio() {
         {chartData.length > 0 && (
           <div className="bg-ios-elev border border-ios-sep rounded-ios shadow-card overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-4 border-b border-ios-sep">
-              <BarChart2 className="w-3.5 h-3.5 text-ios-label0" />
+              <BarChart2 className="w-3.5 h-3.5 text-ios-label2" />
               <span className="text-sm font-semibold text-ios-label">Histórico 6 meses</span>
             </div>
             <div className="px-5 py-4">
@@ -668,7 +668,7 @@ export default function DetallaNegocio() {
           {/* Toolbar */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-ios-sep">
             <div className="flex items-center gap-2">
-              <ReceiptText className="w-3.5 h-3.5 text-ios-label0" />
+              <ReceiptText className="w-3.5 h-3.5 text-ios-label2" />
               <span className="text-sm font-semibold text-ios-label">Transacciones</span>
               <span className="text-xs font-mono text-ios-label3">{transactions.length}</span>
             </div>
@@ -686,7 +686,7 @@ export default function DetallaNegocio() {
                     className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
                       txnFilter === id
                         ? 'bg-ios-elev2 text-ios-label'
-                        : 'text-ios-label0 hover:text-ios-label'
+                        : 'text-ios-label2 hover:text-ios-label'
                     }`}
                   >
                     {label}
@@ -739,7 +739,7 @@ export default function DetallaNegocio() {
         <div className="bg-ios-elev border border-ios-sep rounded-ios shadow-card overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-ios-sep">
             <div className="flex items-center gap-2">
-              <CheckSquare className="w-3.5 h-3.5 text-ios-label0" />
+              <CheckSquare className="w-3.5 h-3.5 text-ios-label2" />
               <span className="text-sm font-semibold text-ios-label">Tareas pendientes</span>
               {todos.length > 0 && (
                 <span className="text-xs font-mono text-ios-label3">{todos.length}</span>
