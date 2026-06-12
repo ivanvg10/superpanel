@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
   try {
     const [
       businessesRes,
-      cannabisRes,
       weightLatestRes,
       weight7dRes,
       gymWeekRes,
@@ -43,12 +42,6 @@ router.get('/', async (req, res) => {
         WHERE b.user_id = $1
         ORDER BY b.created_at ASC
       `, [uid]),
-
-      // Días sin cannabis (CURRENT_DATE - última fecha de log)
-      pool.query(
-        `SELECT (CURRENT_DATE - MAX(date))::integer AS days_since FROM cannabis_log WHERE user_id = $1`,
-        [uid]
-      ),
 
       // Último peso registrado
       pool.query(
@@ -110,7 +103,6 @@ router.get('/', async (req, res) => {
 
     res.json({
       businesses:       businessesRes.rows,
-      cannabis_streak:  cannabisRes.rows[0]?.days_since ?? null,
       weight: latestWeight
         ? {
             kg:       parseFloat(latestWeight.weight_kg),

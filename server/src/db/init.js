@@ -83,16 +83,6 @@ async function initDB() {
       UNIQUE(user_id, date)
     );
 
-    CREATE TABLE IF NOT EXISTS cannabis_log (
-      id         SERIAL PRIMARY KEY,
-      user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
-      date       DATE NOT NULL DEFAULT CURRENT_DATE,
-      sessions   INTEGER DEFAULT 1,
-      notes      TEXT,
-      created_at TIMESTAMP DEFAULT NOW(),
-      UNIQUE(user_id, date)
-    );
-
     CREATE TABLE IF NOT EXISTS reminders (
       id          SERIAL PRIMARY KEY,
       user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,

@@ -210,48 +210,6 @@ router.delete('/weight/:id', async (req, res) => {
   }
 });
 
-// ─── CANNABIS ─────────────────────────────────────────────────────────────────
-
-router.get('/cannabis', async (req, res) => {
-  try {
-    const { rows } = await pool.query(
-      'SELECT * FROM cannabis_log WHERE user_id = $1 ORDER BY date DESC',
-      [req.user.id]
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error('[cannabis GET]', err.message);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
-});
-
-router.post('/cannabis', async (req, res) => {
-  try {
-    const { date, sessions = 1, notes } = req.body;
-    const { rows } = await pool.query(
-      `INSERT INTO cannabis_log (user_id, date, sessions, notes)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (user_id, date) DO UPDATE SET sessions = $3, notes = $4
-       RETURNING *`,
-      [req.user.id, date || new Date().toISOString().split('T')[0], sessions, notes || null]
-    );
-    res.status(201).json(rows[0]);
-  } catch (err) {
-    console.error('[cannabis POST]', err.message);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
-});
-
-router.delete('/cannabis/:id', async (req, res) => {
-  try {
-    await pool.query('DELETE FROM cannabis_log WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('[cannabis DELETE]', err.message);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
-});
-
 // ─── RECORDATORIOS ────────────────────────────────────────────────────────────
 
 router.get('/reminders', async (req, res) => {

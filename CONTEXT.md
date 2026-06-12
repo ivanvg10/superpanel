@@ -1,5 +1,10 @@
 # Superpanel — Contexto del Proyecto
 
+## ⚙️ Flujo de trabajo (NORMA PERMANENTE)
+- **Iván NUNCA revisa en local.** Siempre prueba en producción. No levantar dev/puertos ni pedir que abra `localhost`. Verificación local = solo `npm run build` + `node --check` (sintaxis/compilación).
+- **Pushear SIEMPRE, sin pedir confirmación.** Al terminar cualquier cambio: `git add -A` + commit descriptivo + `git push` a `main`. Vercel despliega el frontend automáticamente; Railway el backend. Lo que valida Iván es el deploy en prod.
+- **Actualizar este CONTEXT.md** en cada sesión con lo que se hizo.
+
 ## Qué es
 App web interna (un solo usuario: Iván León) como torre de control de **León Ventures**. Centraliza finanzas y tracking personal. **Arquitectura:** León Ventures NO gestiona los negocios — solo LEE sus datos como espejo para tener gestión financiera global automática. Cada negocio se opera en su propio admin (`chaifit/superadmin`, `leoncoach/superadmin`). Aquí se sigue ingresando dinero manual de otras cosas, y se espejan los ingresos reales (Stripe) de los negocios conectados.
 
@@ -34,13 +39,14 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 
 ## Estado de etapas
 - **Etapa 1 ✅** — Monorepo, auth JWT, login, ProtectedRoute, Sidebar con todas las secciones
-- **Etapa 2 ✅** — Sección Personal: todos, gym, box, peso (recharts), cannabis (streak), recordatorios
+- **Etapa 2 ✅** — Sección Personal: todos, gym, box, peso (recharts), recordatorios
 - **Etapa 3 ✅** — Negocios: vista general consolidada, detalle por negocio, transacciones, MonthPicker
 - **Etapa 4 ✅** — Polish + deploy: design system premium, componentes UI base, README, configs Railway/Vercel
-- **Etapa 5 ✅** — Dashboard Home `/`: GET /dashboard (Promise.all 8 queries), consolidado negocios, panel fitness (cannabis streak / gym / box / peso+delta), tareas urgentes, recordatorios próximos/vencidos
+- **Etapa 5 ✅** — Dashboard Home `/`: GET /dashboard (Promise.all), consolidado negocios, panel actividad (gym / box / peso+delta), tareas urgentes, recordatorios próximos/vencidos
 - **Etapa 6 ✅** — Polish DetallaNegocio: history sparkline (BarChart 6 meses), sidebar dinámico desde DB, MRR semántico con `currentMrr` siempre del mes en curso
 - **Etapa 7 ✅** — CRUD negocios: POST /negocios (nuevo endpoint, auto-slug), modal "Nuevo negocio" en VistaGeneral, modal "Editar negocio" (Settings) en DetallaNegocio, sidebar se refresca vía evento `negocios-updated`
 - **Etapa 8 ⚠️ REVERTIDA** — Panel operativo León Coach (`LeonCoachPanel.jsx` + `routes/leoncoach.js`, 7 endpoints, 4 tabs). Eliminado en Etapa 9: ese funnel/cuestionarios/clientes se mueve a `leoncoach/superadmin`. Se conserva solo el pool `chaifit.js` (lo usa el espejo).
+- **Etapa 10 ✅ (2026-06-12)** — **Eliminación de cannabis + rediseño iOS nativo (en curso).** Cannabis eliminado por completo: endpoints `/personal/cannabis`, query `cannabis_streak` del dashboard, ítem de sidebar, ruta, `Cannabis.jsx` borrado y **`DROP TABLE cannabis_log`** corrido en la BD de producción (Railway). Estética iOS arrancada: tokens globales nuevos (`tailwind.config.js` paleta `ios.*` con azul de sistema `#0A84FF`, system font SF Pro, radios `rounded-ios`/`rounded-ios-lg`, fondo `#000`), `index.css` + `index.html` sin Google Fonts. **Rediseñados en esta sesión:** `Dashboard.jsx` (Large Title, balance hero, listas inset-grouped, iconos en cuadros redondeados, chevrons) y `Sidebar.jsx` (item activo fill azul). **PENDIENTE (siguiente sesión):** aplicar look iOS a Negocios (lista+detalle), Personal (Pendientes/Gym/Box/Peso/Recordatorios) + componentes UI base, y Login.
 - **Etapa 9 ✅ (2026-06-11)** — **León Ventures = espejo financiero global.** Se eliminó el panel operativo de León Coach (`routes/leoncoach.js`, `LeonCoachPanel.jsx`, su registro `/leon-coach` en `server/index.js`, import+render en `DetallaNegocio.jsx`). Nuevo `server/src/services/espejoChaifit.js`: lee ingresos reales en vivo de la BD de Chai Fit, solo lectura, tolerante a fallos (try/catch → si falla, sigue lo manual). `chai-fit` ← tabla `pagos` (`estado='completado'`, Stripe SaaS) + MRR de `suscripciones` activas. `leon-coach` ← `pagos_clientes` JOIN clientes (tenant LEON). Cableado en `negocios.js` (GET / y GET /:slug) y `dashboard.js`. Filas espejo: `origen:'espejo'`, badge "Auto" (Zap), no editables/borrables. Las transacciones manuales no cambian.
 
 ## Ideas para siguiente etapa (no comprometidas)
@@ -56,11 +62,11 @@ Hay proyectos con nombres similares en la cuenta. El real es **"superpanel-serve
 - Design system documentado en `/DESIGN_SYSTEM.md`
 - Animaciones con framer-motion, variantes en `/client/src/lib/animations.js`
 - Componentes UI base en `/client/src/components/ui/`: Button, Input, Badge, Modal, EmptyState, PageLoader, Card
-- `cannabis_log` y `weight_log` tienen `UNIQUE(user_id, date)` → `ON CONFLICT DO UPDATE`
+- `weight_log` tiene `UNIQUE(user_id, date)` → `ON CONFLICT DO UPDATE`
 - CORS: `CLIENT_URL` soporta múltiples origins separados por coma
 - En Login y cualquier catch de API: usar `typeof msg === 'string' ? msg : 'fallback'` — las 404 de Vercel devuelven `{error: {code, message}}` (objeto) no string
 - **Conexión dual de BD:** `server/src/db/index.js` → Superpanel DB (principal). `server/src/db/chaifit.js` → BD de Chai Fit (Railway, pool max 5, usado por el espejo `espejoChaifit.js`). Ambas usan `rejectUnauthorized: false` en producción.
-- **Espejo de ingresos (`services/espejoChaifit.js`):** solo lectura, tolerante a fallos. Negocios espejados: `chai-fit` (tabla `pagos`, MRR de `suscripciones`) y `leon-coach` (`pagos_clientes` tenant LEON). ⚠️ `pagos` nunca se SELECT en el código de Chai Fit; se asumió timestamp `creado_en` (convención del repo) — verificar si chai-fit sale en 0.
+- **Espejo de ingresos (`services/espejoChaifit.js`):** solo lectura, tolerante a fallos. Negocios espejados: `chai-fit` (tabla `pagos`, MRR de `suscripciones`) y `leon-coach` (`pagos_clientes` tenant LEON). ✅ VERIFICADO (2026-06-12) contra la BD real de Chai Fit: `pagos.creado_en` existe (timestamptz default now()), los 3 queries corren sin error de esquema. Hoy sale $0 por falta de datos reales (no por bug).
 - **Slugs hardcodeados:** `'chai-fit'` y `'leon-coach'` en seed.js — valores exactos para condicionales del espejo, no derivarlos del nombre.
 
 ## Variables de entorno Railway (superpanel-api)
