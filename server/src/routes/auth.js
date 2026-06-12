@@ -2,6 +2,7 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
+const { getToken } = require('../middleware/authenticate');
 
 const cookieOpts = {
   httpOnly: true,
@@ -33,7 +34,9 @@ router.post('/login', async (req, res) => {
     );
 
     res.cookie('token', token, cookieOpts);
-    res.json({ user: { id: user.id, email: user.email, name: user.name } });
+    // Devolvemos también el token para que el cliente lo guarde y autentique
+    // vía Authorization: Bearer (necesario en Safari iOS, que bloquea la cookie).
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name } });
   } catch (err) {
     console.error('[auth/login]', err.message);
     res.status(500).json({ error: 'Error del servidor' });
@@ -48,7 +51,7 @@ router.post('/logout', (req, res) => {
 
 // GET /auth/me  — verifica sesión activa
 router.get('/me', async (req, res) => {
-  const token = req.cookies?.token;
+  const token = getToken(req);
   if (!token) return res.status(401).json({ error: 'No autenticado' });
 
   try {

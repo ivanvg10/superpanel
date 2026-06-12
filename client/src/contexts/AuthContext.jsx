@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import api from '../lib/api';
+import api, { TOKEN_KEY } from '../lib/api';
 
 const AuthContext = createContext(null);
 
@@ -17,12 +17,14 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password });
+    if (res.data.token) localStorage.setItem(TOKEN_KEY, res.data.token); // auth móvil
     setUser(res.data.user);
     return res.data.user;
   };
 
   const logout = async () => {
-    await api.post('/auth/logout');
+    try { await api.post('/auth/logout'); } catch { /* da igual si falla */ }
+    localStorage.removeItem(TOKEN_KEY);
     setUser(null);
   };
 

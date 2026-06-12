@@ -87,7 +87,7 @@ export default function Sidebar() {
     : 'SU';
 
   return (
-    <aside className="w-60 flex-shrink-0 bg-ios-elev/60 backdrop-blur-xl border-r border-ios-sep flex flex-col h-full">
+    <aside className="hidden md:flex w-60 flex-shrink-0 bg-ios-elev/60 backdrop-blur-xl border-r border-ios-sep flex-col h-full">
       {/* Wordmark */}
       <div className="px-4 py-5">
         <div className="flex items-center gap-2.5">

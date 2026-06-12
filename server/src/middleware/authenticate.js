@@ -1,9 +1,18 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../db');
 
+// Obtiene el token de la cabecera Authorization (Bearer) o, si no, de la cookie.
+// El header es la vía principal: Safari iOS bloquea las cookies cross-site (ITP),
+// así que el móvil autentica vía Bearer + localStorage.
+function getToken(req) {
+  const h = req.headers.authorization;
+  if (h && h.startsWith('Bearer ')) return h.slice(7);
+  return req.cookies?.token;
+}
+
 // Middleware reutilizable para rutas protegidas en futuras etapas
 async function authenticate(req, res, next) {
-  const token = req.cookies?.token;
+  const token = getToken(req);
   if (!token) return res.status(401).json({ error: 'No autenticado' });
 
   try {
@@ -20,4 +29,5 @@ async function authenticate(req, res, next) {
   }
 }
 
+authenticate.getToken = getToken;
 module.exports = authenticate;
