@@ -1,8 +1,9 @@
+// Píldoras estilo iOS: fill suave sin borde, color de sistema.
 const PROJECT_STYLES = {
-  'chai-fit':   'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  'leon-coach': 'bg-blue-500/10    text-blue-400    border-blue-500/20',
-  'san-charly': 'bg-amber-500/10   text-amber-400   border-amber-500/20',
-  'personal':   'bg-violet-500/10  text-violet-400  border-violet-500/20',
+  'chai-fit':   'bg-ios-green/15  text-ios-green',
+  'leon-coach': 'bg-ios-blue/15   text-ios-blue',
+  'san-charly': 'bg-ios-orange/15 text-ios-orange',
+  'personal':   'bg-ios-purple/15 text-ios-purple',
 };
 
 const PROJECT_LABELS = {
@@ -13,10 +14,10 @@ const PROJECT_LABELS = {
 };
 
 const PRIORITY_STYLES = {
-  urgent: 'bg-red-500/10    text-red-400    border-red-500/20',
-  high:   'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  medium: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  low:    'bg-zinc-700/40   text-zinc-400   border-zinc-700/40',
+  urgent: 'bg-ios-red/15    text-ios-red',
+  high:   'bg-ios-orange/15 text-ios-orange',
+  medium: 'bg-ios-yellow/15 text-ios-yellow',
+  low:    'bg-ios-gray/20   text-ios-label2',
 };
 
 const PRIORITY_LABELS = {
@@ -27,9 +28,9 @@ const PRIORITY_LABELS = {
 };
 
 export function ProjectBadge({ project, className = '' }) {
-  const styles = PROJECT_STYLES[project] || 'bg-zinc-700/40 text-zinc-400 border-zinc-700/40';
+  const styles = PROJECT_STYLES[project] || 'bg-ios-gray/20 text-ios-label2';
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${styles} ${className}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${styles} ${className}`}>
       {PROJECT_LABELS[project] || project}
     </span>
   );
@@ -38,7 +39,7 @@ export function ProjectBadge({ project, className = '' }) {
 export function PriorityBadge({ priority, className = '' }) {
   const styles = PRIORITY_STYLES[priority] || PRIORITY_STYLES.medium;
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${styles} ${className}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${styles} ${className}`}>
       {PRIORITY_LABELS[priority] || priority}
     </span>
   );
@@ -46,19 +47,19 @@ export function PriorityBadge({ priority, className = '' }) {
 
 export function PriorityDot({ priority, className = '' }) {
   const colors = {
-    urgent: 'bg-red-500',
-    high:   'bg-orange-500',
-    medium: 'bg-yellow-500',
-    low:    'bg-zinc-500',
+    urgent: 'bg-ios-red',
+    high:   'bg-ios-orange',
+    medium: 'bg-ios-yellow',
+    low:    'bg-ios-gray',
   };
   return (
-    <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${colors[priority] || colors.medium} ${className}`} />
+    <span className={`inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 ${colors[priority] || colors.medium} ${className}`} />
   );
 }
 
 export default function Badge({ children, className = '' }) {
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border bg-zinc-800 text-zinc-400 border-zinc-700 ${className}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-ios-elev2 text-ios-label2 ${className}`}>
       {children}
     </span>
   );

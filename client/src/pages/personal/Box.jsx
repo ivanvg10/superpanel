@@ -55,10 +55,10 @@ function StatsBar({ sessions }) {
         { label: 'Este mes',      value: thisMonth, unit: 'sesiones' },
         { label: 'Rounds promedio', value: avgRounds ? avgRounds.toFixed(1) : '—', unit: null },
       ].map(({ label, value, unit }) => (
-        <div key={label} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-card">
-          <p className="text-xs text-zinc-500 mb-1">{label}</p>
-          <p className="font-display font-bold text-2xl text-zinc-50 leading-none">{value}</p>
-          {unit && <p className="text-xs text-zinc-600 mt-0.5">{unit}</p>}
+        <div key={label} className="bg-ios-elev border border-ios-sep rounded-ios p-4 shadow-card">
+          <p className="text-xs text-ios-label0 mb-1">{label}</p>
+          <p className="font-display font-bold text-2xl text-ios-label leading-none">{value}</p>
+          {unit && <p className="text-xs text-ios-label3 mt-0.5">{unit}</p>}
         </div>
       ))}
     </div>
@@ -117,10 +117,10 @@ export default function Box() {
 
   return (
     <motion.div {...fadeUp} className="min-h-full">
-      <div className="border-b border-zinc-800 px-8 py-6 flex items-center justify-between sticky top-0 bg-zinc-950/90 backdrop-blur-sm z-10">
+      <div className="border-b border-ios-sep px-5 pt-7 pb-4 flex items-center justify-between sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div>
-          <h2 className="font-display text-xl font-bold text-zinc-50">Box</h2>
-          <p className="text-sm text-zinc-500 mt-0.5">{sessions.length} sesiones registradas</p>
+          <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Box</h2>
+          <p className="text-sm text-ios-label0 mt-0.5">{sessions.length} sesiones registradas</p>
         </div>
         <Button onClick={() => { setForm(EMPTY_FORM); setModal(true); }}>
           <Plus className="w-4 h-4" />
@@ -128,7 +128,7 @@ export default function Box() {
         </Button>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-5">
         {sessions.length > 0 && <StatsBar sessions={sessions} />}
 
         {sessions.length === 0 ? (
@@ -146,7 +146,7 @@ export default function Box() {
           <motion.div {...staggerContainer} className="space-y-8">
             {Object.entries(grouped).map(([month, items]) => (
               <motion.section key={month} {...staggerItem}>
-                <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-3 capitalize">
+                <h3 className="text-xs font-semibold text-ios-label0 uppercase tracking-widest mb-3 capitalize">
                   {monthLabel(month)}
                 </h3>
                 <div className="space-y-2">
@@ -154,33 +154,33 @@ export default function Box() {
                     <motion.div
                       key={s.id}
                       layout
-                      className="group flex items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3.5 shadow-card hover:border-zinc-700 hover:shadow-card-hover transition-all duration-200"
+                      className="group flex items-center gap-4 bg-ios-elev border border-ios-sep rounded-ios px-4 py-3.5 shadow-card hover:border-ios-sep hover:shadow-card-hover transition-all duration-200"
                     >
-                      <div className="w-8 h-8 bg-orange-500/10 border border-orange-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <BoxIcon className="w-4 h-4 text-orange-400" />
+                      <div className="w-8 h-8 bg-ios-orange/10 border border-ios-orange/20 rounded-ios flex items-center justify-center flex-shrink-0">
+                        <BoxIcon className="w-4 h-4 text-ios-orange" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 flex-wrap">
-                          <span className="flex items-center gap-1.5 text-sm font-medium text-zinc-200">
-                            <CalendarDays className="w-3.5 h-3.5 text-zinc-500" />
+                          <span className="flex items-center gap-1.5 text-sm font-medium text-ios-label">
+                            <CalendarDays className="w-3.5 h-3.5 text-ios-label0" />
                             {formatDisplayDate(s.date)}
                           </span>
                           {s.duration_minutes && (
-                            <span className="flex items-center gap-1 text-xs text-zinc-500 font-mono">
+                            <span className="flex items-center gap-1 text-xs text-ios-label0 font-mono">
                               <Clock className="w-3 h-3" />{s.duration_minutes} min
                             </span>
                           )}
                           {s.rounds && (
-                            <span className="flex items-center gap-1 text-xs text-orange-400/80 font-mono">
+                            <span className="flex items-center gap-1 text-xs text-ios-orange/80 font-mono">
                               <Repeat2 className="w-3 h-3" />{s.rounds} rounds
                             </span>
                           )}
                         </div>
-                        {s.notes && <p className="text-xs text-zinc-600 mt-1 line-clamp-1">{s.notes}</p>}
+                        {s.notes && <p className="text-xs text-ios-label3 mt-1 line-clamp-1">{s.notes}</p>}
                       </div>
                       <button
                         onClick={() => handleDelete(s.id)}
-                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-ios-label3 hover:text-ios-red hover:bg-ios-red/10 transition-all"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>

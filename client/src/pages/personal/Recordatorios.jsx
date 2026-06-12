@@ -28,10 +28,10 @@ function ReminderCard({ reminder, onToggle, onDelete }) {
     <motion.div
       layout
       {...staggerItem}
-      className={`group flex items-start gap-3 p-4 rounded-xl border transition-all duration-200
+      className={`group flex items-start gap-3 p-4 rounded-ios border transition-all duration-200
         ${done
-          ? 'bg-zinc-900/30 border-zinc-800/40 opacity-50'
-          : 'bg-zinc-900 border-zinc-800 shadow-card hover:border-zinc-700 hover:shadow-card-hover'
+          ? 'bg-ios-elev/30 border-ios-sep/40 opacity-50'
+          : 'bg-ios-elev border-ios-sep shadow-card hover:border-ios-sep hover:shadow-card-hover'
         }`}
     >
       {/* Status toggle */}
@@ -39,23 +39,23 @@ function ReminderCard({ reminder, onToggle, onDelete }) {
         onClick={() => onToggle(reminder)}
         className={`mt-0.5 w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200
           ${done
-            ? 'bg-indigo-600 border-indigo-600 text-white'
-            : 'border-zinc-600 hover:border-indigo-500 hover:bg-indigo-500/10'
+            ? 'bg-ios-blue border-ios-blue text-white'
+            : 'border-ios-label3 hover:border-ios-blue hover:bg-ios-blue/10'
           }`}
       >
         {done && <Check className="w-2.5 h-2.5" />}
       </button>
 
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-zinc-500' : 'text-zinc-100'}`}>
+        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-ios-label0' : 'text-ios-label'}`}>
           {reminder.title}
         </p>
         {reminder.description && (
-          <p className="text-xs text-zinc-600 mt-1 line-clamp-2">{reminder.description}</p>
+          <p className="text-xs text-ios-label3 mt-1 line-clamp-2">{reminder.description}</p>
         )}
         {due && (
           <div className={`flex items-center gap-1 mt-2 text-xs font-medium ${
-            done ? 'text-zinc-600' : due.isPast ? 'text-red-400' : 'text-zinc-500'
+            done ? 'text-ios-label3' : due.isPast ? 'text-ios-red' : 'text-ios-label0'
           }`}>
             <CalendarClock className="w-3 h-3" />
             {due.isPast && !done ? 'Vencido · ' : ''}{due.label}
@@ -67,7 +67,7 @@ function ReminderCard({ reminder, onToggle, onDelete }) {
       <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5 flex-shrink-0">
         <button
           onClick={() => onDelete(reminder.id)}
-          className="p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+          className="p-1.5 rounded-lg text-ios-label3 hover:text-ios-red hover:bg-ios-red/10 transition-colors"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
@@ -148,13 +148,13 @@ export default function Recordatorios() {
 
   return (
     <motion.div {...fadeUp} className="min-h-full">
-      <div className="border-b border-zinc-800 px-8 py-6 flex items-center justify-between sticky top-0 bg-zinc-950/90 backdrop-blur-sm z-10">
+      <div className="border-b border-ios-sep px-5 pt-7 pb-4 flex items-center justify-between sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div>
-          <h2 className="font-display text-xl font-bold text-zinc-50">Recordatorios</h2>
+          <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Recordatorios</h2>
           <p className="text-sm mt-0.5">
-            <span className="text-zinc-500">{pending.length} pendiente{pending.length !== 1 ? 's' : ''}</span>
+            <span className="text-ios-label0">{pending.length} pendiente{pending.length !== 1 ? 's' : ''}</span>
             {overdueCount > 0 && (
-              <span className="text-red-400 ml-2">· {overdueCount} vencido{overdueCount !== 1 ? 's' : ''}</span>
+              <span className="text-ios-red ml-2">· {overdueCount} vencido{overdueCount !== 1 ? 's' : ''}</span>
             )}
           </p>
         </div>
@@ -164,7 +164,7 @@ export default function Recordatorios() {
         </Button>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-5">
         {reminders.length === 0 ? (
           <EmptyState
             icon={Bell}
@@ -180,11 +180,11 @@ export default function Recordatorios() {
           <>
             {sorted.length === 0 && done.length > 0 && (
               <div className="flex flex-col items-center py-12 text-center">
-                <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mb-3">
-                  <Check className="w-5 h-5 text-emerald-400" />
+                <div className="w-12 h-12 bg-ios-green/10 border border-ios-green/20 rounded-ios-lg flex items-center justify-center mb-3">
+                  <Check className="w-5 h-5 text-ios-green" />
                 </div>
-                <p className="text-sm font-medium text-zinc-400">Todo al día</p>
-                <p className="text-xs text-zinc-600 mt-1">No tienes recordatorios pendientes</p>
+                <p className="text-sm font-medium text-ios-label2">Todo al día</p>
+                <p className="text-xs text-ios-label3 mt-1">No tienes recordatorios pendientes</p>
               </div>
             )}
 
@@ -205,11 +205,11 @@ export default function Recordatorios() {
               <div>
                 <button
                   onClick={() => setShowDone((v) => !v)}
-                  className="flex items-center gap-2 text-xs font-medium text-zinc-600 hover:text-zinc-400 transition-colors mb-3"
+                  className="flex items-center gap-2 text-xs font-medium text-ios-label3 hover:text-ios-label2 transition-colors mb-3"
                 >
                   <BellOff className="w-3.5 h-3.5" />
                   Completados ({done.length})
-                  <span className="text-zinc-700">{showDone ? '↑' : '↓'}</span>
+                  <span className="text-ios-label3">{showDone ? '↑' : '↓'}</span>
                 </button>
                 <AnimatePresence>
                   {showDone && (

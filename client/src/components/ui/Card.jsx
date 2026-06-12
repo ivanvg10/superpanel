@@ -1,7 +1,8 @@
+// Tarjeta estilo iOS: fondo elevado, esquinas redondeadas, sin bordes duros.
 export default function Card({ children, className = '', hover = true, flat = false }) {
   if (flat) {
     return (
-      <div className={`bg-zinc-800/50 rounded-xl border border-zinc-800 ${className}`}>
+      <div className={`bg-ios-elev2 rounded-ios ${className}`}>
         {children}
       </div>
     );
@@ -9,9 +10,9 @@ export default function Card({ children, className = '', hover = true, flat = fa
 
   return (
     <div
-      className={`bg-zinc-900 border border-zinc-800 rounded-xl shadow-card
-        ${hover ? 'hover:border-zinc-700 hover:shadow-card-hover' : ''}
-        transition-all duration-200 ${className}`}
+      className={`bg-ios-elev rounded-ios-lg
+        ${hover ? 'hover:bg-ios-elev2 transition-colors duration-200' : ''}
+        ${className}`}
     >
       {children}
     </div>

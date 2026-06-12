@@ -32,24 +32,24 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-ios-bg flex items-center justify-center px-4 relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-indigo-600/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-ios-blue/8 rounded-full blur-3xl" />
       </div>
 
       <motion.div {...fadeUp} className="w-full max-w-sm relative z-10">
         {/* Wordmark */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl mb-5 shadow-glow-sm">
-            <span className="font-display font-bold text-lg text-indigo-400 tracking-tight">SP</span>
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-ios-blue rounded-ios-lg mb-5 shadow-glow">
+            <span className="font-display font-bold text-xl text-white tracking-tight">SP</span>
           </div>
-          <h1 className="font-display text-2xl font-bold text-white tracking-tight">Superpanel</h1>
-          <p className="text-zinc-500 text-sm mt-1.5">León Ventures · Acceso privado</p>
+          <h1 className="font-display text-[28px] font-bold text-ios-label tracking-tight">Superpanel</h1>
+          <p className="text-ios-label2 text-[15px] mt-1.5">León Ventures · Acceso privado</p>
         </div>
 
         {/* Card */}
-        <div className="bg-zinc-900 rounded-2xl border border-zinc-800 shadow-modal p-7">
+        <div className="bg-ios-elev rounded-ios-lg p-7">
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
               label="Email"
@@ -76,9 +76,9 @@ export default function Login() {
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3"
+                className="bg-ios-red/10 rounded-[12px] px-4 py-3"
               >
-                <p className="text-red-400 text-sm">{error}</p>
+                <p className="text-ios-red text-[15px]">{error}</p>
               </motion.div>
             )}
 

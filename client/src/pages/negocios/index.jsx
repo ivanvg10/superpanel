@@ -24,22 +24,22 @@ function fmx(n) {
 function LiveDot() {
   return (
     <span className="relative flex h-2 w-2 flex-shrink-0">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ios-green opacity-75" />
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-ios-green" />
     </span>
   );
 }
 
 const STATUS_CFG = {
-  live:         { label: 'Live',            cls: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', dot: true  },
-  beta:         { label: 'Beta',            cls: 'bg-blue-500/10    text-blue-400    border-blue-500/20',    dot: false },
-  construccion: { label: 'En construcción', cls: 'bg-amber-500/10   text-amber-400   border-amber-500/20',  dot: false },
+  live:         { label: 'Live',            cls: 'bg-ios-green/10 text-ios-green border-ios-green/20', dot: true  },
+  beta:         { label: 'Beta',            cls: 'bg-ios-blue/10    text-ios-blue    border-ios-blue/20',    dot: false },
+  construccion: { label: 'En construcción', cls: 'bg-ios-orange/10   text-ios-orange   border-ios-orange/20',  dot: false },
 };
 
 const COLOR_CFG = {
-  emerald: { icon: 'text-emerald-400', ring: 'bg-emerald-500/10 border-emerald-500/20' },
-  blue:    { icon: 'text-blue-400',    ring: 'bg-blue-500/10    border-blue-500/20'    },
-  amber:   { icon: 'text-amber-400',   ring: 'bg-amber-500/10   border-amber-500/20'  },
+  emerald: { icon: 'text-ios-green', ring: 'bg-ios-green/10 border-ios-green/20' },
+  blue:    { icon: 'text-ios-blue',    ring: 'bg-ios-blue/10    border-ios-blue/20'    },
+  amber:   { icon: 'text-ios-orange',   ring: 'bg-ios-orange/10   border-ios-orange/20'  },
 };
 
 function StatusBadge({ status }) {
@@ -53,10 +53,10 @@ function StatusBadge({ status }) {
 }
 
 function TrendIndicator({ value }) {
-  if (!value || value === 0) return <Minus className="w-3.5 h-3.5 text-zinc-500" />;
+  if (!value || value === 0) return <Minus className="w-3.5 h-3.5 text-ios-label0" />;
   return value > 0
-    ? <TrendingUp  className="w-3.5 h-3.5 text-emerald-400" />
-    : <TrendingDown className="w-3.5 h-3.5 text-red-400" />;
+    ? <TrendingUp  className="w-3.5 h-3.5 text-ios-green" />
+    : <TrendingDown className="w-3.5 h-3.5 text-ios-red" />;
 }
 
 // ─── Card de negocio ──────────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ function NegocioCard({ business }) {
     <motion.div variants={staggerItem}>
       <Link
         to={`/negocios/${business.slug}`}
-        className="block bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-card hover:border-zinc-700 hover:shadow-card-hover transition-all duration-200 group"
+        className="block bg-ios-elev border border-ios-sep rounded-ios p-5 shadow-card hover:border-ios-sep hover:shadow-card-hover transition-all duration-200 group"
       >
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
@@ -94,7 +94,7 @@ function NegocioCard({ business }) {
           </div>
           <div className="flex items-center gap-1.5">
             <StatusBadge status={business.status} />
-            <ArrowUpRight className="w-3.5 h-3.5 text-zinc-700 group-hover:text-zinc-400 transition-colors" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-ios-label3 group-hover:text-ios-label2 transition-colors" />
           </div>
         </div>
 
@@ -102,8 +102,8 @@ function NegocioCard({ business }) {
         <div className="space-y-2.5">
           {metrics.map(({ label, value, mono }) => (
             <div key={label} className="flex justify-between items-center">
-              <span className="text-xs text-zinc-600">{label}</span>
-              <span className={`text-xs ${mono ? 'font-mono text-zinc-400' : 'text-zinc-500'}`}>
+              <span className="text-xs text-ios-label3">{label}</span>
+              <span className={`text-xs ${mono ? 'font-mono text-ios-label2' : 'text-ios-label0'}`}>
                 {value}
               </span>
             </div>
@@ -111,12 +111,12 @@ function NegocioCard({ business }) {
         </div>
 
         {/* Net footer */}
-        <div className="mt-4 pt-3.5 border-t border-zinc-800 flex items-center justify-between">
-          <span className="text-[11px] text-zinc-600 uppercase tracking-wide">Neto</span>
+        <div className="mt-4 pt-3.5 border-t border-ios-sep flex items-center justify-between">
+          <span className="text-[11px] text-ios-label3 uppercase tracking-wide">Neto</span>
           <div className="flex items-center gap-1.5">
             <TrendIndicator value={net} />
             <span className={`font-mono text-sm font-semibold ${
-              net > 0 ? 'text-emerald-400' : net < 0 ? 'text-red-400' : 'text-zinc-500'
+              net > 0 ? 'text-ios-green' : net < 0 ? 'text-ios-red' : 'text-ios-label0'
             }`}>
               {income > 0 || expenses > 0 ? fmx(net) : '—'}
             </span>
@@ -136,9 +136,9 @@ const STATUS_OPTIONS = [
 ];
 
 const COLOR_OPTIONS = [
-  { id: 'blue',    label: 'Azul',  dot: 'bg-blue-500'    },
-  { id: 'emerald', label: 'Verde', dot: 'bg-emerald-500' },
-  { id: 'amber',   label: 'Ámbar', dot: 'bg-amber-500'   },
+  { id: 'blue',    label: 'Azul',  dot: 'bg-ios-blue'    },
+  { id: 'emerald', label: 'Verde', dot: 'bg-ios-green' },
+  { id: 'amber',   label: 'Ámbar', dot: 'bg-ios-orange'   },
 ];
 
 const EMPTY_BIZ = { name: '', description: '', url: '', admin_url: '', status: 'construccion', color: 'blue' };
@@ -165,8 +165,8 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
 
       {/* Status */}
       <div>
-        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Estado inicial</label>
-        <div className="flex rounded-xl border border-zinc-800 overflow-hidden">
+        <label className="block text-xs font-medium text-ios-label2 uppercase tracking-wide mb-1.5">Estado inicial</label>
+        <div className="flex rounded-ios border border-ios-sep overflow-hidden">
           {STATUS_OPTIONS.map(({ id, label }) => (
             <button
               key={id}
@@ -174,8 +174,8 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
               onClick={() => setForm((f) => ({ ...f, status: id }))}
               className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
                 form.status === id
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60'
+                  ? 'bg-ios-blue text-white'
+                  : 'text-ios-label0 hover:text-ios-label hover:bg-ios-elev2/60'
               }`}
             >
               {label}
@@ -186,17 +186,17 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
 
       {/* Color */}
       <div>
-        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Color</label>
+        <label className="block text-xs font-medium text-ios-label2 uppercase tracking-wide mb-1.5">Color</label>
         <div className="flex gap-2">
           {COLOR_OPTIONS.map(({ id, label, dot }) => (
             <button
               key={id}
               type="button"
               onClick={() => setForm((f) => ({ ...f, color: id }))}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-ios border text-xs font-medium transition-all ${
                 form.color === id
-                  ? 'border-indigo-500/60 bg-indigo-500/10 text-zinc-100'
-                  : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+                  ? 'border-ios-blue/60 bg-ios-blue/10 text-ios-label'
+                  : 'border-ios-sep text-ios-label0 hover:border-ios-sep hover:text-ios-label'
               }`}
             >
               <span className={`w-2.5 h-2.5 rounded-full ${dot}`} />
@@ -223,7 +223,7 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
         />
       </div>
 
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-ios-red">{error}</p>}
 
       <div className="flex gap-2 pt-1">
         <Button type="submit" disabled={saving} className="flex-1">
@@ -239,16 +239,16 @@ function NuevoNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
 
 function StatCard({ label, value, sub, highlight }) {
   return (
-    <div className={`rounded-xl p-4 border ${
+    <div className={`rounded-ios p-4 border ${
       highlight
-        ? 'bg-indigo-600/10 border-indigo-500/20'
-        : 'bg-zinc-800/50 border-zinc-800'
+        ? 'bg-ios-blue/10 border-ios-blue/20'
+        : 'bg-ios-elev2/50 border-ios-sep'
     }`}>
-      <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wide mb-2">{label}</p>
-      <p className={`font-mono text-2xl font-bold leading-none ${highlight ? 'text-indigo-300' : 'text-zinc-200'}`}>
+      <p className="text-[11px] font-medium text-ios-label0 uppercase tracking-wide mb-2">{label}</p>
+      <p className={`font-mono text-2xl font-bold leading-none ${highlight ? 'text-ios-blue' : 'text-ios-label'}`}>
         {value}
       </p>
-      {sub && <p className="text-xs text-zinc-600 mt-1.5">{sub}</p>}
+      {sub && <p className="text-xs text-ios-label3 mt-1.5">{sub}</p>}
     </div>
   );
 }
@@ -305,11 +305,11 @@ function VistaGeneral() {
   return (
     <motion.div {...fadeUp} className="min-h-full">
       {/* Header */}
-      <div className="border-b border-zinc-800 px-8 py-5 sticky top-0 bg-zinc-950/90 backdrop-blur-sm z-10">
+      <div className="border-b border-ios-sep px-5 pt-7 pb-4 sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-display text-xl font-bold text-zinc-50">Negocios</h2>
-            <p className="text-sm text-zinc-500 mt-0.5 capitalize">Vista consolidada · {mesActual}</p>
+            <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Negocios</h2>
+            <p className="text-sm text-ios-label0 mt-0.5 capitalize">Vista consolidada · {mesActual}</p>
           </div>
           <Button
             variant="secondary"
@@ -324,9 +324,9 @@ function VistaGeneral() {
 
       <div className="p-8 space-y-6">
         {/* Consolidado */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-card">
+        <div className="bg-ios-elev border border-ios-sep rounded-ios p-5 shadow-card">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-3.5 h-3.5 text-zinc-600" />
+            <Activity className="w-3.5 h-3.5 text-ios-label3" />
             <h3 className="font-display font-semibold text-white text-sm">León Ventures — Consolidado</h3>
           </div>
           <div className="grid grid-cols-4 gap-3">

@@ -65,15 +65,15 @@ function groupByDate(txns) {
 }
 
 const STATUS_CFG = {
-  live:         { label: 'Live',            cls: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', ping: true  },
-  beta:         { label: 'Beta',            cls: 'bg-blue-500/10    text-blue-400    border-blue-500/20',    ping: false },
-  construccion: { label: 'En construcción', cls: 'bg-amber-500/10   text-amber-400   border-amber-500/20',  ping: false },
+  live:         { label: 'Live',            cls: 'bg-ios-green/10 text-ios-green border-ios-green/20', ping: true  },
+  beta:         { label: 'Beta',            cls: 'bg-ios-blue/10    text-ios-blue    border-ios-blue/20',    ping: false },
+  construccion: { label: 'En construcción', cls: 'bg-ios-orange/10   text-ios-orange   border-ios-orange/20',  ping: false },
 };
 
 const COLOR_CFG = {
-  emerald: { icon: 'text-emerald-400', ring: 'bg-emerald-500/10 border-emerald-500/20' },
-  blue:    { icon: 'text-blue-400',    ring: 'bg-blue-500/10    border-blue-500/20'    },
-  amber:   { icon: 'text-amber-400',   ring: 'bg-amber-500/10   border-amber-500/20'  },
+  emerald: { icon: 'text-ios-green', ring: 'bg-ios-green/10 border-ios-green/20' },
+  blue:    { icon: 'text-ios-blue',    ring: 'bg-ios-blue/10    border-ios-blue/20'    },
+  amber:   { icon: 'text-ios-orange',   ring: 'bg-ios-orange/10   border-ios-orange/20'  },
 };
 
 const STATUS_OPTIONS = [
@@ -83,9 +83,9 @@ const STATUS_OPTIONS = [
 ];
 
 const EDIT_COLOR_OPTIONS = [
-  { id: 'blue',    label: 'Azul',  dot: 'bg-blue-500'    },
-  { id: 'emerald', label: 'Verde', dot: 'bg-emerald-500' },
-  { id: 'amber',   label: 'Ámbar', dot: 'bg-amber-500'   },
+  { id: 'blue',    label: 'Azul',  dot: 'bg-ios-blue'    },
+  { id: 'emerald', label: 'Verde', dot: 'bg-ios-green' },
+  { id: 'amber',   label: 'Ámbar', dot: 'bg-ios-orange'   },
 ];
 
 const INCOME_CATEGORIES  = ['Suscripciones', 'Servicios', 'Consultoría', 'Ventas', 'Publicidad', 'Otro'];
@@ -98,13 +98,13 @@ const EMPTY_TXN = { type: 'income', amount: '', description: '', category: '', d
 function HistoryTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
-      <p className="text-zinc-400 mb-1.5 capitalize font-medium">{label}</p>
+    <div className="bg-ios-elev border border-ios-sep rounded-ios px-3 py-2 shadow-xl text-xs">
+      <p className="text-ios-label2 mb-1.5 capitalize font-medium">{label}</p>
       {payload.map((p) => (
         <div key={p.dataKey} className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: p.fill }} />
-          <span className="text-zinc-500">{p.name}:</span>
-          <span className="font-mono text-zinc-200">{fmx(p.value)}</span>
+          <span className="text-ios-label0">{p.name}:</span>
+          <span className="font-mono text-ios-label">{fmx(p.value)}</span>
         </div>
       ))}
     </div>
@@ -116,16 +116,16 @@ function MonthPicker({ value, onChange }) {
     <div className="flex items-center gap-2">
       <button
         onClick={() => onChange(shiftMonth(value, -1))}
-        className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+        className="p-1.5 rounded-lg text-ios-label0 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
       >
         <ChevronLeft className="w-3.5 h-3.5" />
       </button>
-      <span className="text-sm font-medium text-zinc-300 capitalize w-36 text-center">
+      <span className="text-sm font-medium text-ios-label capitalize w-36 text-center">
         {monthLabel(value)}
       </span>
       <button
         onClick={() => onChange(shiftMonth(value, 1))}
-        className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+        className="p-1.5 rounded-lg text-ios-label0 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
       >
         <ChevronRight className="w-3.5 h-3.5" />
       </button>
@@ -135,17 +135,17 @@ function MonthPicker({ value, onChange }) {
 
 function StatTile({ label, value, color = 'default', icon: Icon }) {
   const colors = {
-    default:  'text-zinc-50',
-    positive: 'text-emerald-400',
-    negative: 'text-red-400',
-    accent:   'text-indigo-300',
-    muted:    'text-zinc-400',
+    default:  'text-ios-label',
+    positive: 'text-ios-green',
+    negative: 'text-ios-red',
+    accent:   'text-ios-blue',
+    muted:    'text-ios-label2',
   };
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-card">
+    <div className="bg-ios-elev border border-ios-sep rounded-ios p-4 shadow-card">
       <div className="flex items-center gap-1.5 mb-2">
-        {Icon && <Icon className="w-3 h-3 text-zinc-600" />}
-        <p className="text-[11px] font-medium text-zinc-500 uppercase tracking-wide">{label}</p>
+        {Icon && <Icon className="w-3 h-3 text-ios-label3" />}
+        <p className="text-[11px] font-medium text-ios-label0 uppercase tracking-wide">{label}</p>
       </div>
       <p className={`font-mono font-bold text-xl leading-none ${colors[color]}`}>{value}</p>
     </div>
@@ -158,38 +158,38 @@ function TransactionRow({ txn, onDelete }) {
     <motion.div
       layout
       {...staggerItem}
-      className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-zinc-800 bg-zinc-900 shadow-card hover:border-zinc-700 transition-all duration-200"
+      className="group flex items-center gap-3 px-4 py-3 rounded-ios border border-ios-sep bg-ios-elev shadow-card hover:border-ios-sep transition-all duration-200"
     >
       {/* Type icon */}
       <div className={`w-7 h-7 rounded-lg border flex items-center justify-center flex-shrink-0 ${
         isIncome
-          ? 'bg-emerald-500/10 border-emerald-500/20'
-          : 'bg-red-500/10    border-red-500/20'
+          ? 'bg-ios-green/10 border-ios-green/20'
+          : 'bg-ios-red/10    border-ios-red/20'
       }`}>
         {isIncome
-          ? <TrendingUp   className="w-3.5 h-3.5 text-emerald-400" />
-          : <TrendingDown className="w-3.5 h-3.5 text-red-400" />
+          ? <TrendingUp   className="w-3.5 h-3.5 text-ios-green" />
+          : <TrendingDown className="w-3.5 h-3.5 text-ios-red" />
         }
       </div>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-zinc-200 truncate">
+        <p className="text-sm font-medium text-ios-label truncate">
           {txn.description || (isIncome ? 'Ingreso' : 'Gasto')}
         </p>
         <div className="flex items-center gap-2 mt-0.5">
           {txn.category && (
-            <span className="text-[11px] bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded border border-zinc-700">
+            <span className="text-[11px] bg-ios-elev2 text-ios-label0 px-1.5 py-0.5 rounded border border-ios-sep">
               {txn.category}
             </span>
           )}
           {txn.is_recurring && (
-            <span className="flex items-center gap-1 text-[11px] text-indigo-400/70">
+            <span className="flex items-center gap-1 text-[11px] text-ios-blue/70">
               <Repeat2 className="w-2.5 h-2.5" />Recurrente
             </span>
           )}
           {txn.origen === 'espejo' && (
-            <span className="flex items-center gap-1 text-[11px] text-amber-400/80">
+            <span className="flex items-center gap-1 text-[11px] text-ios-orange/80">
               <Zap className="w-2.5 h-2.5" />Auto
             </span>
           )}
@@ -198,7 +198,7 @@ function TransactionRow({ txn, onDelete }) {
 
       {/* Amount */}
       <span className={`font-mono font-semibold text-sm flex-shrink-0 ${
-        isIncome ? 'text-emerald-400' : 'text-red-400'
+        isIncome ? 'text-ios-green' : 'text-ios-red'
       }`}>
         {isIncome ? '+' : '-'}{fmx(txn.amount)}
       </span>
@@ -209,7 +209,7 @@ function TransactionRow({ txn, onDelete }) {
       ) : (
         <button
           onClick={() => onDelete(txn.id)}
-          className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all flex-shrink-0"
+          className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-ios-label3 hover:text-ios-red hover:bg-ios-red/10 transition-all flex-shrink-0"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
@@ -219,13 +219,13 @@ function TransactionRow({ txn, onDelete }) {
 }
 
 function PendienteTodo({ todo }) {
-  const PRIORITY_TEXT = { urgent: 'text-red-400', high: 'text-orange-400', medium: 'text-yellow-400', low: 'text-zinc-500' };
+  const PRIORITY_TEXT = { urgent: 'text-ios-red', high: 'text-ios-orange', medium: 'text-ios-yellow', low: 'text-ios-label0' };
   return (
-    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-zinc-800 bg-zinc-900/50">
+    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-ios border border-ios-sep bg-ios-elev/50">
       <PriorityDot priority={todo.priority} />
-      <span className="text-sm text-zinc-300 flex-1 truncate">{todo.title}</span>
+      <span className="text-sm text-ios-label flex-1 truncate">{todo.title}</span>
       {todo.due_date && (
-        <span className="text-[11px] text-zinc-600 flex-shrink-0">
+        <span className="text-[11px] text-ios-label3 flex-shrink-0">
           {formatDate(todo.due_date)}
         </span>
       )}
@@ -254,8 +254,8 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
 
       {/* Status */}
       <div>
-        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Estado</label>
-        <div className="flex rounded-xl border border-zinc-800 overflow-hidden">
+        <label className="block text-xs font-medium text-ios-label2 uppercase tracking-wide mb-1.5">Estado</label>
+        <div className="flex rounded-ios border border-ios-sep overflow-hidden">
           {STATUS_OPTIONS.map(({ id, label }) => (
             <button
               key={id}
@@ -263,8 +263,8 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
               onClick={() => setForm((f) => ({ ...f, status: id }))}
               className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
                 form.status === id
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60'
+                  ? 'bg-ios-blue text-white'
+                  : 'text-ios-label0 hover:text-ios-label hover:bg-ios-elev2/60'
               }`}
             >
               {label}
@@ -275,17 +275,17 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
 
       {/* Color */}
       <div>
-        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Color</label>
+        <label className="block text-xs font-medium text-ios-label2 uppercase tracking-wide mb-1.5">Color</label>
         <div className="flex gap-2">
           {EDIT_COLOR_OPTIONS.map(({ id, label, dot }) => (
             <button
               key={id}
               type="button"
               onClick={() => setForm((f) => ({ ...f, color: id }))}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-ios border text-xs font-medium transition-all ${
                 form.color === id
-                  ? 'border-indigo-500/60 bg-indigo-500/10 text-zinc-100'
-                  : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+                  ? 'border-ios-blue/60 bg-ios-blue/10 text-ios-label'
+                  : 'border-ios-sep text-ios-label0 hover:border-ios-sep hover:text-ios-label'
               }`}
             >
               <span className={`w-2.5 h-2.5 rounded-full ${dot}`} />
@@ -312,7 +312,7 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
         />
       </div>
 
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-ios-red">{error}</p>}
 
       <div className="flex gap-2 pt-1">
         <Button type="submit" disabled={saving} className="flex-1">
@@ -326,24 +326,24 @@ function EditNegocioForm({ form, setForm, onSubmit, onClose, saving, error }) {
 
 function TransactionForm({ form, setForm, onSubmit, onClose, saving }) {
   const cats = form.type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
-  const selectCls = "w-full bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-100 text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/60 hover:border-zinc-700 transition-all";
+  const selectCls = "w-full bg-ios-elev border border-ios-sep rounded-ios text-ios-label text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-ios-blue/40 focus:border-ios-blue/60 hover:border-ios-sep transition-all";
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       {/* Type toggle */}
       <div>
-        <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1.5">Tipo</label>
-        <div className="flex rounded-xl border border-zinc-800 overflow-hidden">
+        <label className="block text-xs font-medium text-ios-label2 uppercase tracking-wide mb-1.5">Tipo</label>
+        <div className="flex rounded-ios border border-ios-sep overflow-hidden">
           {[
-            { id: 'income',  label: 'Ingreso', active: 'bg-emerald-600 text-white' },
-            { id: 'expense', label: 'Gasto',   active: 'bg-red-600 text-white'     },
+            { id: 'income',  label: 'Ingreso', active: 'bg-ios-green text-white' },
+            { id: 'expense', label: 'Gasto',   active: 'bg-ios-red text-white'     },
           ].map(({ id, label, active }) => (
             <button
               key={id}
               type="button"
               onClick={() => setForm((f) => ({ ...f, type: id, category: '' }))}
               className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-                form.type === id ? active : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60'
+                form.type === id ? active : 'text-ios-label0 hover:text-ios-label hover:bg-ios-elev2/60'
               }`}
             >
               {label}
@@ -380,7 +380,7 @@ function TransactionForm({ form, setForm, onSubmit, onClose, saving }) {
 
       {/* Category */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">Categoría</label>
+        <label className="text-xs font-medium text-ios-label2 uppercase tracking-wide">Categoría</label>
         <select
           value={form.category}
           onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
@@ -397,9 +397,9 @@ function TransactionForm({ form, setForm, onSubmit, onClose, saving }) {
           type="checkbox"
           checked={form.is_recurring}
           onChange={(e) => setForm((f) => ({ ...f, is_recurring: e.target.checked }))}
-          className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-indigo-600 accent-indigo-600"
+          className="w-4 h-4 rounded border-ios-sep bg-ios-elev text-ios-blue accent-ios-blue"
         />
-        <span className="text-sm text-zinc-400 group-hover:text-zinc-200 transition-colors">
+        <span className="text-sm text-ios-label2 group-hover:text-ios-label transition-colors">
           Recurrente mensual (cuenta para MRR)
         </span>
       </label>
@@ -535,34 +535,34 @@ export default function DetallaNegocio() {
   return (
     <motion.div {...fadeUp} className="min-h-full">
       {/* ── Header ── */}
-      <div className="border-b border-zinc-800 px-8 py-5 sticky top-0 bg-zinc-950/90 backdrop-blur-sm z-10">
+      <div className="border-b border-ios-sep px-5 pt-7 pb-4 sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/negocios')}
-              className="p-1.5 rounded-lg text-zinc-600 hover:text-zinc-300 hover:bg-zinc-800 transition-colors"
+              className="p-1.5 rounded-lg text-ios-label3 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
 
-            <div className={`w-8 h-8 rounded-xl border flex items-center justify-center flex-shrink-0 ${col.ring}`}>
+            <div className={`w-8 h-8 rounded-ios border flex items-center justify-center flex-shrink-0 ${col.ring}`}>
               <TrendingUp className={`w-4 h-4 ${col.icon}`} />
             </div>
 
             <div>
-              <h2 className="font-display font-bold text-zinc-50 text-lg leading-tight">
+              <h2 className="font-display font-bold text-ios-label text-lg leading-tight">
                 {business.name}
               </h2>
               {business.description && (
-                <p className="text-xs text-zinc-500 mt-0.5">{business.description}</p>
+                <p className="text-xs text-ios-label0 mt-0.5">{business.description}</p>
               )}
             </div>
 
             <div className={`inline-flex items-center gap-1.5 text-[11px] px-2 py-0.5 rounded-full border font-medium ${statusCfg.cls}`}>
               {statusCfg.ping && (
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ios-green opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-ios-green" />
                 </span>
               )}
               {statusCfg.label}
@@ -575,7 +575,7 @@ export default function DetallaNegocio() {
                 href={business.admin_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-200 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-zinc-600 px-3 py-2 rounded-xl transition-all"
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-ios-label2 hover:text-ios-label bg-ios-elev2 hover:bg-ios-elev2 border border-ios-sep hover:border-ios-label3 px-3 py-2 rounded-ios transition-all"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 Ir al admin
@@ -583,7 +583,7 @@ export default function DetallaNegocio() {
             )}
             <button
               onClick={openEditModal}
-              className="p-2 rounded-xl text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 border border-transparent hover:border-zinc-700 transition-all"
+              className="p-2 rounded-ios text-ios-label0 hover:text-ios-label hover:bg-ios-elev2 border border-transparent hover:border-ios-sep transition-all"
               title="Editar negocio"
             >
               <Settings className="w-4 h-4" />
@@ -607,7 +607,7 @@ export default function DetallaNegocio() {
               icon={Repeat2}
             />
             {isHistoricMonth && mrr > 0 && (
-              <span className="absolute top-3 right-3 text-[10px] font-medium text-indigo-400/60 leading-none">
+              <span className="absolute top-3 right-3 text-[10px] font-medium text-ios-blue/60 leading-none">
                 hoy
               </span>
             )}
@@ -634,15 +634,15 @@ export default function DetallaNegocio() {
 
         {/* ── Histórico 6 meses ── */}
         {chartData.length > 0 && (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">
-            <div className="flex items-center gap-2 px-5 py-4 border-b border-zinc-800">
-              <BarChart2 className="w-3.5 h-3.5 text-zinc-500" />
-              <span className="text-sm font-semibold text-zinc-300">Histórico 6 meses</span>
+          <div className="bg-ios-elev border border-ios-sep rounded-ios shadow-card overflow-hidden">
+            <div className="flex items-center gap-2 px-5 py-4 border-b border-ios-sep">
+              <BarChart2 className="w-3.5 h-3.5 text-ios-label0" />
+              <span className="text-sm font-semibold text-ios-label">Histórico 6 meses</span>
             </div>
             <div className="px-5 py-4">
               <ResponsiveContainer width="100%" height={160}>
                 <BarChart data={chartData} barGap={3} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-                  <CartesianGrid vertical={false} stroke="#27272A" />
+                  <CartesianGrid vertical={false} stroke="#2C2C2E" />
                   <XAxis
                     dataKey="label"
                     tick={{ fill: '#71717A', fontSize: 11, fontFamily: 'Inter' }}
@@ -655,8 +655,8 @@ export default function DetallaNegocio() {
                     tickFormatter={(v) => v === 0 ? '0' : v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`}
                   />
                   <Tooltip content={<HistoryTooltip />} cursor={{ fill: 'rgba(99,102,241,0.05)', radius: 4 }} />
-                  <Bar dataKey="income" name="Ingresos" fill="#10B981" radius={[3, 3, 0, 0]} maxBarSize={18} />
-                  <Bar dataKey="expenses" name="Gastos" fill="#EF4444" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                  <Bar dataKey="income" name="Ingresos" fill="#30D158" radius={[3, 3, 0, 0]} maxBarSize={18} />
+                  <Bar dataKey="expenses" name="Gastos" fill="#FF453A" radius={[3, 3, 0, 0]} maxBarSize={18} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -664,17 +664,17 @@ export default function DetallaNegocio() {
         )}
 
         {/* ── Transacciones ── */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">
+        <div className="bg-ios-elev border border-ios-sep rounded-ios shadow-card overflow-hidden">
           {/* Toolbar */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-ios-sep">
             <div className="flex items-center gap-2">
-              <ReceiptText className="w-3.5 h-3.5 text-zinc-500" />
-              <span className="text-sm font-semibold text-zinc-300">Transacciones</span>
-              <span className="text-xs font-mono text-zinc-600">{transactions.length}</span>
+              <ReceiptText className="w-3.5 h-3.5 text-ios-label0" />
+              <span className="text-sm font-semibold text-ios-label">Transacciones</span>
+              <span className="text-xs font-mono text-ios-label3">{transactions.length}</span>
             </div>
             <div className="flex items-center gap-3">
               {/* Type filter */}
-              <div className="flex gap-1 bg-zinc-800 rounded-lg p-1">
+              <div className="flex gap-1 bg-ios-elev2 rounded-lg p-1">
                 {[
                   { id: 'all',     label: 'Todas'   },
                   { id: 'income',  label: 'Ingresos' },
@@ -685,8 +685,8 @@ export default function DetallaNegocio() {
                     onClick={() => setTxnFilter(id)}
                     className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
                       txnFilter === id
-                        ? 'bg-zinc-700 text-zinc-100'
-                        : 'text-zinc-500 hover:text-zinc-300'
+                        ? 'bg-ios-elev2 text-ios-label'
+                        : 'text-ios-label0 hover:text-ios-label'
                     }`}
                   >
                     {label}
@@ -714,7 +714,7 @@ export default function DetallaNegocio() {
               <motion.div {...staggerContainer} className="space-y-5">
                 {Object.entries(grouped).map(([date, items]) => (
                   <motion.div key={date} {...staggerItem}>
-                    <p className="text-[11px] font-semibold text-zinc-600 uppercase tracking-widest mb-2">
+                    <p className="text-[11px] font-semibold text-ios-label3 uppercase tracking-widest mb-2">
                       {formatDate(date)}
                     </p>
                     <div className="space-y-2">
@@ -736,18 +736,18 @@ export default function DetallaNegocio() {
         {/* ── Panel León Coach (solo visible para este negocio) ── */}
 
         {/* ── Pendientes de este negocio ── */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
+        <div className="bg-ios-elev border border-ios-sep rounded-ios shadow-card overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-ios-sep">
             <div className="flex items-center gap-2">
-              <CheckSquare className="w-3.5 h-3.5 text-zinc-500" />
-              <span className="text-sm font-semibold text-zinc-300">Tareas pendientes</span>
+              <CheckSquare className="w-3.5 h-3.5 text-ios-label0" />
+              <span className="text-sm font-semibold text-ios-label">Tareas pendientes</span>
               {todos.length > 0 && (
-                <span className="text-xs font-mono text-zinc-600">{todos.length}</span>
+                <span className="text-xs font-mono text-ios-label3">{todos.length}</span>
               )}
             </div>
             <Link
               to={`/personal/pendientes?project=${slug}`}
-              className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1"
+              className="text-xs text-ios-blue hover:text-ios-blue transition-colors flex items-center gap-1"
             >
               Ver en Pendientes
               <ArrowUpRight className="w-3 h-3" />
@@ -757,14 +757,14 @@ export default function DetallaNegocio() {
           <div className="p-5">
             {todos.length === 0 ? (
               <div className="flex items-center gap-3 py-4">
-                <div className="w-8 h-8 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <CheckCheck className="w-4 h-4 text-emerald-400" />
+                <div className="w-8 h-8 bg-ios-green/10 border border-ios-green/20 rounded-ios flex items-center justify-center flex-shrink-0">
+                  <CheckCheck className="w-4 h-4 text-ios-green" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-zinc-400">Sin tareas pendientes</p>
-                  <p className="text-xs text-zinc-600 mt-0.5">
+                  <p className="text-sm font-medium text-ios-label2">Sin tareas pendientes</p>
+                  <p className="text-xs text-ios-label3 mt-0.5">
                     Añade tareas desde{' '}
-                    <Link to={`/personal/pendientes?project=${slug}`} className="text-indigo-400 hover:underline">
+                    <Link to={`/personal/pendientes?project=${slug}`} className="text-ios-blue hover:underline">
                       Pendientes
                     </Link>
                   </p>

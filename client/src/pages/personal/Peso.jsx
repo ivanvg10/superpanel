@@ -23,9 +23,9 @@ function formatShortDate(str) {
 function CustomTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 shadow-popover">
-      <p className="text-xs text-zinc-400 mb-0.5">{payload[0]?.payload?.label}</p>
-      <p className="font-mono font-semibold text-zinc-100">{payload[0]?.value} kg</p>
+    <div className="bg-ios-elev2 border border-ios-sep rounded-ios px-3 py-2 shadow-popover">
+      <p className="text-xs text-ios-label2 mb-0.5">{payload[0]?.payload?.label}</p>
+      <p className="font-mono font-semibold text-ios-label">{payload[0]?.value} kg</p>
     </div>
   );
 }
@@ -91,14 +91,14 @@ export default function Peso() {
   }));
 
   const TrendIcon = diff === null ? Minus : parseFloat(diff) < 0 ? TrendingDown : parseFloat(diff) > 0 ? TrendingUp : Minus;
-  const trendColor = diff === null ? 'text-zinc-500' : parseFloat(diff) < 0 ? 'text-emerald-400' : parseFloat(diff) > 0 ? 'text-red-400' : 'text-zinc-500';
+  const trendColor = diff === null ? 'text-ios-label0' : parseFloat(diff) < 0 ? 'text-ios-green' : parseFloat(diff) > 0 ? 'text-ios-red' : 'text-ios-label0';
 
   return (
     <motion.div {...fadeUp} className="min-h-full">
-      <div className="border-b border-zinc-800 px-8 py-6 flex items-center justify-between sticky top-0 bg-zinc-950/90 backdrop-blur-sm z-10">
+      <div className="border-b border-ios-sep px-5 pt-7 pb-4 flex items-center justify-between sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div>
-          <h2 className="font-display text-xl font-bold text-zinc-50">Peso Corporal</h2>
-          <p className="text-sm text-zinc-500 mt-0.5">{entries.length} registros</p>
+          <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Peso Corporal</h2>
+          <p className="text-sm text-ios-label0 mt-0.5">{entries.length} registros</p>
         </div>
         <Button onClick={() => { setForm({ date: todayISO(), weight_kg: '', notes: '' }); setModal(true); }}>
           <Plus className="w-4 h-4" />
@@ -107,7 +107,7 @@ export default function Peso() {
       </div>
 
       {entries.length === 0 ? (
-        <div className="px-8">
+        <div className="max-w-2xl mx-auto px-4">
           <EmptyState
             icon={TrendingDown}
             title="Sin registros de peso"
@@ -120,45 +120,45 @@ export default function Peso() {
           />
         </div>
       ) : (
-        <div className="px-8 py-6">
+        <div className="max-w-2xl mx-auto px-4 py-5">
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mb-6">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-card">
-              <p className="text-xs text-zinc-500 mb-1">Peso actual</p>
-              <p className="font-display font-bold text-zinc-50 leading-none">
+            <div className="bg-ios-elev border border-ios-sep rounded-ios p-4 shadow-card">
+              <p className="text-xs text-ios-label0 mb-1">Peso actual</p>
+              <p className="font-display font-bold text-ios-label leading-none">
                 <span className="text-3xl">{current ? parseFloat(current.weight_kg).toFixed(1) : '—'}</span>
-                <span className="text-base text-zinc-400 ml-1">kg</span>
+                <span className="text-base text-ios-label2 ml-1">kg</span>
               </p>
             </div>
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-card">
-              <p className="text-xs text-zinc-500 mb-1">Cambio</p>
+            <div className="bg-ios-elev border border-ios-sep rounded-ios p-4 shadow-card">
+              <p className="text-xs text-ios-label0 mb-1">Cambio</p>
               <div className={`flex items-center gap-1.5 ${trendColor}`}>
                 <TrendIcon className="w-4 h-4" />
                 <span className="font-display font-bold text-2xl leading-none">
                   {diff !== null ? `${diff > 0 ? '+' : ''}${diff}` : '—'}
                 </span>
-                {diff !== null && <span className="text-base text-zinc-400">kg</span>}
+                {diff !== null && <span className="text-base text-ios-label2">kg</span>}
               </div>
             </div>
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-card">
-              <p className="text-xs text-zinc-500 mb-1">Total registros</p>
-              <p className="font-display font-bold text-3xl text-zinc-50 leading-none">{entries.length}</p>
+            <div className="bg-ios-elev border border-ios-sep rounded-ios p-4 shadow-card">
+              <p className="text-xs text-ios-label0 mb-1">Total registros</p>
+              <p className="font-display font-bold text-3xl text-ios-label leading-none">{entries.length}</p>
             </div>
           </div>
 
           {/* Chart */}
           {chartData.length > 1 && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-card mb-6">
-              <p className="text-xs font-medium text-zinc-500 mb-4 uppercase tracking-wider">Evolución</p>
+            <div className="bg-ios-elev border border-ios-sep rounded-ios p-5 shadow-card mb-6">
+              <p className="text-xs font-medium text-ios-label0 mb-4 uppercase tracking-wider">Evolución</p>
               <ResponsiveContainer width="100%" height={200}>
                 <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
                   <defs>
                     <linearGradient id="weightGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%"   stopColor="#6366F1" stopOpacity={0.25} />
-                      <stop offset="100%" stopColor="#6366F1" stopOpacity={0} />
+                      <stop offset="0%"   stopColor="#0A84FF" stopOpacity={0.25} />
+                      <stop offset="100%" stopColor="#0A84FF" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272A" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2C2C2E" vertical={false} />
                   <XAxis
                     dataKey="label"
                     tick={{ fill: '#52525B', fontSize: 11, fontFamily: 'Inter' }}
@@ -174,8 +174,8 @@ export default function Peso() {
                   />
                   <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#3F3F46', strokeWidth: 1 }} />
                   <Area
-                    type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2}
-                    fill="url(#weightGrad)" dot={false} activeDot={{ r: 4, fill: '#6366F1', strokeWidth: 0 }}
+                    type="monotone" dataKey="value" stroke="#0A84FF" strokeWidth={2}
+                    fill="url(#weightGrad)" dot={false} activeDot={{ r: 4, fill: '#0A84FF', strokeWidth: 0 }}
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -184,7 +184,7 @@ export default function Peso() {
 
           {/* History list */}
           <div>
-            <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-3">Historial</p>
+            <p className="text-xs font-semibold text-ios-label0 uppercase tracking-widest mb-3">Historial</p>
             <motion.div {...staggerContainer} className="space-y-2">
               {entries.map((e, i) => {
                 const prev = entries[i + 1];
@@ -196,25 +196,25 @@ export default function Peso() {
                     key={e.id}
                     layout
                     {...staggerItem}
-                    className="group flex items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 shadow-card hover:border-zinc-700 transition-all duration-200"
+                    className="group flex items-center gap-4 bg-ios-elev border border-ios-sep rounded-ios px-4 py-3 shadow-card hover:border-ios-sep transition-all duration-200"
                   >
                     <div className="flex-1 flex items-center gap-4">
-                      <span className="text-sm font-medium text-zinc-300 w-24">
+                      <span className="text-sm font-medium text-ios-label w-24">
                         {formatShortDate(e.date)}
                       </span>
-                      <span className="font-mono font-semibold text-zinc-100">
+                      <span className="font-mono font-semibold text-ios-label">
                         {parseFloat(e.weight_kg).toFixed(1)} kg
                       </span>
                       {d !== null && (
-                        <span className={`text-xs font-mono ${neg ? 'text-emerald-400' : pos ? 'text-red-400' : 'text-zinc-600'}`}>
+                        <span className={`text-xs font-mono ${neg ? 'text-ios-green' : pos ? 'text-ios-red' : 'text-ios-label3'}`}>
                           {parseFloat(d) > 0 ? '+' : ''}{d}
                         </span>
                       )}
-                      {e.notes && <span className="text-xs text-zinc-600 truncate">{e.notes}</span>}
+                      {e.notes && <span className="text-xs text-ios-label3 truncate">{e.notes}</span>}
                     </div>
                     <button
                       onClick={() => handleDelete(e.id)}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-ios-label3 hover:text-ios-red hover:bg-ios-red/10 transition-all"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

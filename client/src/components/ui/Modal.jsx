@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { modalBackdrop, modalPanel } from '../../lib/animations';
 
+// Hoja modal estilo iOS: panel elevado con esquinas grandes, separador hairline.
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }) {
   // Cierra con Escape
   useEffect(() => {
@@ -22,21 +23,21 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
           <motion.div
             {...modalBackdrop}
             onClick={onClose}
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md"
           />
 
           {/* Panel */}
           <motion.div
             {...modalPanel}
-            className={`relative bg-zinc-900 border border-zinc-800 rounded-2xl shadow-modal w-full ${maxWidths[size]} z-10`}
+            className={`relative bg-ios-elev rounded-ios-lg shadow-modal w-full ${maxWidths[size]} z-10`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-zinc-800">
-              <h3 className="font-display text-base font-semibold text-zinc-50">{title}</h3>
+            <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-ios-sep">
+              <h3 className="font-display text-[17px] font-semibold text-ios-label">{title}</h3>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition-colors"
+                className="p-1.5 rounded-full text-ios-label2 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

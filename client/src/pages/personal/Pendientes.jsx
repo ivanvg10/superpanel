@@ -30,13 +30,13 @@ function formatDate(str) {
   if (!str) return null;
   const d = new Date(str + 'T00:00:00');
   const today = new Date(); today.setHours(0,0,0,0);
-  if (d < today) return { label: 'Vencida', cls: 'text-red-400' };
-  if (d.getTime() === today.getTime()) return { label: 'Hoy', cls: 'text-orange-400' };
+  if (d < today) return { label: 'Vencida', cls: 'text-ios-red' };
+  if (d.getTime() === today.getTime()) return { label: 'Hoy', cls: 'text-ios-orange' };
   const diff = Math.round((d - today) / 86400000);
-  if (diff === 1) return { label: 'Mañana', cls: 'text-yellow-400' };
+  if (diff === 1) return { label: 'Mañana', cls: 'text-ios-yellow' };
   return {
     label: d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' }),
-    cls: 'text-zinc-500',
+    cls: 'text-ios-label0',
   };
 }
 
@@ -48,30 +48,30 @@ function TodoCard({ todo, onToggle, onEdit, onDelete }) {
     <motion.div
       layout
       {...staggerItem}
-      className={`group flex items-start gap-3 p-4 rounded-xl border transition-all duration-200
+      className={`group flex items-start gap-3 p-4 rounded-ios border transition-all duration-200
         ${done
-          ? 'bg-zinc-900/40 border-zinc-800/50 opacity-60'
-          : 'bg-zinc-900 border-zinc-800 shadow-card hover:border-zinc-700 hover:shadow-card-hover'
+          ? 'bg-ios-elev/40 border-ios-sep/50 opacity-60'
+          : 'bg-ios-elev border-ios-sep shadow-card hover:border-ios-sep hover:shadow-card-hover'
         }`}
     >
       {/* Checkbox */}
       <button
         onClick={() => onToggle(todo)}
-        className="mt-0.5 flex-shrink-0 text-zinc-600 hover:text-indigo-400 transition-colors"
+        className="mt-0.5 flex-shrink-0 text-ios-label3 hover:text-ios-blue transition-colors"
       >
         {done
-          ? <CheckCheck className="w-4.5 h-4.5 text-indigo-500" />
+          ? <CheckCheck className="w-4.5 h-4.5 text-ios-blue" />
           : <Circle className="w-4.5 h-4.5" />
         }
       </button>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-zinc-500' : 'text-zinc-100'}`}>
+        <p className={`text-sm font-medium leading-tight ${done ? 'line-through text-ios-label0' : 'text-ios-label'}`}>
           {todo.title}
         </p>
         {todo.description && (
-          <p className="text-xs text-zinc-600 mt-1 line-clamp-1">{todo.description}</p>
+          <p className="text-xs text-ios-label3 mt-1 line-clamp-1">{todo.description}</p>
         )}
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           <ProjectBadge project={todo.project} />
@@ -85,13 +85,13 @@ function TodoCard({ todo, onToggle, onEdit, onDelete }) {
         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
           <button
             onClick={() => onEdit(todo)}
-            className="p-1.5 rounded-lg text-zinc-600 hover:text-zinc-300 hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-ios-label3 hover:text-ios-label hover:bg-ios-elev2 transition-colors"
           >
             <Pencil className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => onDelete(todo.id)}
-            className="p-1.5 rounded-lg text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+            className="p-1.5 rounded-lg text-ios-label3 hover:text-ios-red hover:bg-ios-red/10 transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -122,11 +122,11 @@ function TodoForm({ form, setForm, onSubmit, onClose, loading, editId }) {
       />
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">Proyecto</label>
+          <label className="text-xs font-medium text-ios-label2 uppercase tracking-wide">Proyecto</label>
           <select
             value={form.project}
             onChange={(e) => setForm((f) => ({ ...f, project: e.target.value }))}
-            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-100 text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/60 hover:border-zinc-700 transition-all"
+            className="w-full bg-ios-elev border border-ios-sep rounded-ios text-ios-label text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-ios-blue/40 focus:border-ios-blue/60 hover:border-ios-sep transition-all"
           >
             <option value="personal">Personal</option>
             <option value="chai-fit">Chai Fit</option>
@@ -135,11 +135,11 @@ function TodoForm({ form, setForm, onSubmit, onClose, loading, editId }) {
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">Prioridad</label>
+          <label className="text-xs font-medium text-ios-label2 uppercase tracking-wide">Prioridad</label>
           <select
             value={form.priority}
             onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
-            className="w-full bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-100 text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/60 hover:border-zinc-700 transition-all"
+            className="w-full bg-ios-elev border border-ios-sep rounded-ios text-ios-label text-sm px-3.5 h-10 outline-none focus:ring-2 focus:ring-ios-blue/40 focus:border-ios-blue/60 hover:border-ios-sep transition-all"
           >
             <option value="urgent">Urgente</option>
             <option value="high">Alta</option>
@@ -248,8 +248,8 @@ export default function Pendientes() {
 
   const PRIORITY_LABELS = { urgent: 'Urgente', high: 'Alta', medium: 'Media', low: 'Baja' };
   const PRIORITY_COLORS = {
-    urgent: 'text-red-400', high: 'text-orange-400',
-    medium: 'text-yellow-400', low: 'text-zinc-500',
+    urgent: 'text-ios-red', high: 'text-ios-orange',
+    medium: 'text-ios-yellow', low: 'text-ios-label0',
   };
 
   if (loading) return <PageLoader />;
@@ -258,10 +258,10 @@ export default function Pendientes() {
   return (
     <motion.div {...fadeUp} className="min-h-full">
       {/* Page header */}
-      <div className="border-b border-zinc-800 px-8 py-6 flex items-center justify-between sticky top-0 bg-zinc-950/90 backdrop-blur-sm z-10">
+      <div className="border-b border-ios-sep px-5 pt-7 pb-4 flex items-center justify-between sticky top-0 bg-ios-bg/80 backdrop-blur-xl z-10">
         <div>
-          <h2 className="font-display text-xl font-bold text-zinc-50">Pendientes</h2>
-          <p className="text-sm text-zinc-500 mt-0.5">
+          <h2 className="text-[28px] font-bold tracking-tight text-ios-label">Pendientes</h2>
+          <p className="text-sm text-ios-label0 mt-0.5">
             {pending.length} pendiente{pending.length !== 1 ? 's' : ''} · {done.length} completada{done.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -271,7 +271,7 @@ export default function Pendientes() {
         </Button>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="max-w-2xl mx-auto px-4 py-5">
         {/* Project filter */}
         <div className="flex gap-1.5 flex-wrap mb-6">
           {PROJECTS.map((p) => (
@@ -280,8 +280,8 @@ export default function Pendientes() {
               onClick={() => setProject(p.id)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-150 ${
                 project === p.id
-                  ? 'bg-indigo-600 text-white shadow-glow-sm'
-                  : 'bg-zinc-800/60 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
+                  ? 'bg-ios-blue text-white shadow-glow-sm'
+                  : 'bg-ios-elev2/60 text-ios-label2 hover:text-ios-label hover:bg-ios-elev2'
               }`}
             >
               {p.label}
@@ -307,7 +307,7 @@ export default function Pendientes() {
               <span className={`text-xs font-semibold uppercase tracking-wider ${PRIORITY_COLORS[priority]}`}>
                 {PRIORITY_LABELS[priority]}
               </span>
-              <span className="text-xs text-zinc-700 font-mono">{items.length}</span>
+              <span className="text-xs text-ios-label3 font-mono">{items.length}</span>
             </div>
             <div className="space-y-2">
               {items.map((todo) => (
@@ -328,11 +328,11 @@ export default function Pendientes() {
           <div className="mt-4">
             <button
               onClick={() => setShowDone((v) => !v)}
-              className="flex items-center gap-2 text-xs font-medium text-zinc-600 hover:text-zinc-400 transition-colors mb-3"
+              className="flex items-center gap-2 text-xs font-medium text-ios-label3 hover:text-ios-label2 transition-colors mb-3"
             >
               <CheckCheck className="w-3.5 h-3.5" />
               Completadas ({done.length})
-              <span className="text-zinc-700">{showDone ? '↑' : '↓'}</span>
+              <span className="text-ios-label3">{showDone ? '↑' : '↓'}</span>
             </button>
             <AnimatePresence>
               {showDone && (
