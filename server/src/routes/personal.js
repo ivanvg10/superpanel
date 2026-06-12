@@ -166,50 +166,6 @@ router.delete('/box/:id', async (req, res) => {
   }
 });
 
-// ─── PESO ─────────────────────────────────────────────────────────────────────
-
-router.get('/weight', async (req, res) => {
-  try {
-    const { rows } = await pool.query(
-      'SELECT * FROM weight_log WHERE user_id = $1 ORDER BY date DESC',
-      [req.user.id]
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error('[weight GET]', err.message);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
-});
-
-router.post('/weight', async (req, res) => {
-  try {
-    const { date, weight_kg, notes } = req.body;
-    if (!weight_kg) return res.status(400).json({ error: 'Peso requerido' });
-
-    const { rows } = await pool.query(
-      `INSERT INTO weight_log (user_id, date, weight_kg, notes)
-       VALUES ($1, $2, $3, $4)
-       ON CONFLICT (user_id, date) DO UPDATE SET weight_kg = $3, notes = $4
-       RETURNING *`,
-      [req.user.id, date || new Date().toISOString().split('T')[0], weight_kg, notes || null]
-    );
-    res.status(201).json(rows[0]);
-  } catch (err) {
-    console.error('[weight POST]', err.message);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
-});
-
-router.delete('/weight/:id', async (req, res) => {
-  try {
-    await pool.query('DELETE FROM weight_log WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('[weight DELETE]', err.message);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
-});
-
 // ─── RECORDATORIOS ────────────────────────────────────────────────────────────
 
 router.get('/reminders', async (req, res) => {

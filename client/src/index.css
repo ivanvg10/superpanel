@@ -10,7 +10,34 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: #000;
   }
-  body { background-color: #000; color: #fff; }
+
+  /* App nativa: el documento NUNCA scrollea ni hace rubber-band; todo el
+     movimiento vive dentro del <main> del shell. Sin pinch-zoom. */
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: pan-x pan-y;
+    background-color: #000;
+    color: #fff;
+  }
+  #root { height: 100%; overflow: hidden; }
+
+  /* La UI no es texto seleccionable (sin highlight azul al mantener presionado,
+     sin menú "Copiar" en iOS). La selección se permite solo donde se escribe. */
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  input, textarea, select,
+  [contenteditable]:not([contenteditable="false"]),
+  .seleccionable, .seleccionable * {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
 
   h1, h2, h3, h4 {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
@@ -21,8 +48,6 @@
   .font-mono { font-variant-numeric: tabular-nums; }
 }
 
-/* Scrollbar fino y oscuro (estilo overlay de macOS). */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #48484a; }
+/* Scrollbar oculto (sensación de app, no de web). */
+::-webkit-scrollbar { width: 0; height: 0; }
+* { scrollbar-width: none; }

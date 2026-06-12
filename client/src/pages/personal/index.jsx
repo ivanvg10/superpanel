@@ -2,7 +2,6 @@ import { Routes, Route, Navigate, NavLink } from 'react-router-dom';
 import Pendientes    from './Pendientes';
 import Gym           from './Gym';
 import Box           from './Box';
-import Peso          from './Peso';
 import Recordatorios from './Recordatorios';
 
 // Subsecciones de Personal. En móvil no hay sidebar, así que se navega con estos chips.
@@ -10,7 +9,6 @@ const SUB = [
   { to: 'pendientes',    label: 'Pendientes' },
   { to: 'gym',           label: 'Gym' },
   { to: 'box',           label: 'Box' },
-  { to: 'peso',          label: 'Peso' },
   { to: 'recordatorios', label: 'Recordatorios' },
 ];
 
@@ -43,7 +41,6 @@ export default function PersonalPage() {
         <Route path="pendientes"    element={<Pendientes />} />
         <Route path="gym"           element={<Gym />} />
         <Route path="box"           element={<Box />} />
-        <Route path="peso"          element={<Peso />} />
         <Route path="recordatorios" element={<Recordatorios />} />
         <Route path="*"             element={<Navigate to="pendientes" replace />} />
       </Routes>

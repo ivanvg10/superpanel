@@ -73,16 +73,6 @@ async function initDB() {
       created_at       TIMESTAMP DEFAULT NOW()
     );
 
-    CREATE TABLE IF NOT EXISTS weight_log (
-      id         SERIAL PRIMARY KEY,
-      user_id    INTEGER REFERENCES users(id) ON DELETE CASCADE,
-      date       DATE NOT NULL DEFAULT CURRENT_DATE,
-      weight_kg  DECIMAL(5,2) NOT NULL,
-      notes      TEXT,
-      created_at TIMESTAMP DEFAULT NOW(),
-      UNIQUE(user_id, date)
-    );
-
     CREATE TABLE IF NOT EXISTS reminders (
       id          SERIAL PRIMARY KEY,
       user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,

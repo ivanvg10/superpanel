@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  Dumbbell, Scale, CheckCircle2, Bell, ChevronRight,
+  Dumbbell, CheckCircle2, Bell, ChevronRight,
   TrendingUp, TrendingDown, Building2, AlertCircle, Circle, Sparkles,
 } from 'lucide-react';
 import api from '../lib/api';
@@ -179,7 +179,7 @@ export default function Dashboard() {
   if (loading) return <PageLoader rows={4} />;
   if (error)   return <ErrorState message={error} onRetry={load} />;
 
-  const { businesses, urgent_todos, reminders_due, weight } = data;
+  const { businesses, urgent_todos, reminders_due } = data;
 
   const totalMRR      = businesses.reduce((s, b) => s + Number(b.mrr || 0), 0);
   const totalIncome   = businesses.reduce((s, b) => s + Number(b.income_month || 0), 0);
@@ -188,13 +188,6 @@ export default function Dashboard() {
   const hasData       = totalIncome > 0 || totalExpenses > 0;
 
   const mesActual = new Date().toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
-
-  const weightSub = weight?.delta_7d != null
-    ? `${weight.delta_7d > 0 ? '+' : ''}${weight.delta_7d} kg esta semana`
-    : 'sin comparativa';
-  const weightColor = !weight ? 'text-ios-label3'
-    : weight.delta_7d == null ? 'text-ios-label'
-    : weight.delta_7d <= 0 ? 'text-ios-green' : 'text-ios-orange';
 
   return (
     <motion.div {...fadeUp} className="min-h-full pb-16">
@@ -278,11 +271,7 @@ export default function Dashboard() {
               icon={Dumbbell} tone="red" label="Box esta semana"
               value={data.box_week > 0 ? `${data.box_week}` : '0'}
               valueColor={data.box_week > 0 ? 'text-ios-label' : 'text-ios-label3'}
-            />
-            <Row
-              icon={Scale} tone="teal" label="Peso" sub={weight ? weightSub : 'sin registros'}
-              value={weight ? `${weight.kg} kg` : '—'}
-              valueColor={weightColor}
+              last
             />
           </InsetCard>
         </section>

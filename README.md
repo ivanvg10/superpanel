@@ -28,7 +28,7 @@ superpanel/
 │       └── pages/
 │           ├── Login.jsx
 │           ├── negocios/    Vista general + detalle por negocio
-│           └── personal/    Pendientes, Gym, Box, Peso, Recordatorios
+│           └── personal/    Pendientes, Gym, Box, Recordatorios
 │
 ├── server/          Node + Express — se deploya en Railway
 │   └── src/
@@ -241,5 +241,4 @@ curl http://localhost:3001/health
 | Personal | Pendientes        | CRUD de tareas, filtro por proyecto, agrupadas por prioridad |
 | Personal | Gym               | Registro de sesiones con stats semanales/mensuales   |
 | Personal | Box               | Ídem + campo de rounds                               |
-| Personal | Peso              | Log histórico con gráfica de área (recharts)         |
 | Personal | Recordatorios     | Con fecha/hora, toggle completado, vencidos resaltados |

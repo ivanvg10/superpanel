@@ -2,10 +2,22 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Sin pinch/doble-tap zoom + contenido bajo el notch (viewport-fit=cover) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#000000" />
     <title>Superpanel</title>
+
+    <!-- PWA instalable -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- iOS: abrir a pantalla completa al "Agregar a inicio", barra de estado
+         translúcida para que el fondo negro fluya bajo el notch/Dynamic Island. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Superpanel" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <!-- Tipografía nativa de Apple (SF Pro) vía system font stack — sin Google Fonts. -->
   </head>
   <body>

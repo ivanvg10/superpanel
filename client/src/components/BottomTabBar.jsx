@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, Briefcase, User } from 'lucide-react';
 
-// Tab bar inferior estilo iOS — solo en móvil (en desktop manda el Sidebar).
+// Tab bar inferior estilo iOS. Vive dentro del phone-shell (no es overlay fijo).
 const TABS = [
   { to: '/',                     label: 'Inicio',   icon: Home,      match: '/',          exact: true },
   { to: '/negocios',             label: 'Negocios', icon: Briefcase, match: '/negocios' },
@@ -14,7 +14,7 @@ export default function BottomTabBar() {
   const isActive = (t) => (t.exact ? pathname === t.match : pathname.startsWith(t.match));
 
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-ios-elev/85 backdrop-blur-xl border-t border-ios-sep pb-[env(safe-area-inset-bottom)]">
+    <nav className="flex-shrink-0 bg-ios-elev/85 backdrop-blur-xl border-t border-ios-sep pb-[env(safe-area-inset-bottom)]">
       <div className="flex">
         {TABS.map((t) => {
           const active = isActive(t);
@@ -23,7 +23,7 @@ export default function BottomTabBar() {
             <NavLink
               key={t.to}
               to={t.to}
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 pt-2 pb-1.5 select-none"
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 pt-2 pb-1.5 select-none active:opacity-60 transition-opacity"
             >
               <Icon
                 className={`w-[26px] h-[26px] ${active ? 'text-ios-blue' : 'text-ios-label2'}`}

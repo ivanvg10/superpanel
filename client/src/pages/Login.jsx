@@ -32,7 +32,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-ios-bg flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="h-[100dvh] bg-ios-bg flex items-center justify-center px-4 relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-ios-blue/8 rounded-full blur-3xl" />
